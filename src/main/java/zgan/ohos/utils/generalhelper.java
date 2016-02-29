@@ -60,7 +60,7 @@ public final class generalhelper {
         TelephonyManager telephonyManager = (TelephonyManager) context
                 .getSystemService(Context.TELEPHONY_SERVICE);
         String NativePhoneNumber
-         = telephonyManager.getLine1Number();
+                = telephonyManager.getLine1Number();
         return NativePhoneNumber;
     }
 
@@ -99,7 +99,8 @@ public final class generalhelper {
         String str = format.format(date);
         return str;
     }
-    public static String getStringFromDate(Date date,String formart) {
+
+    public static String getStringFromDate(Date date, String formart) {
         SimpleDateFormat format = new SimpleDateFormat(formart);
         String str = format.format(date);
         return str;
@@ -129,7 +130,7 @@ public final class generalhelper {
 
     // public static
     public class returnsta {
-       public static final String success="success", failure="failure";
+        public static final String success = "success", failure = "failure";
     }
 
 
@@ -137,13 +138,15 @@ public final class generalhelper {
      * @param str frame.strData
      * @return "0\t"取0  用于和服务器通信返回状态码
      */
-    public static String getSocketeStringResult(String str)
-    {
-        String result=str;
-        if (str.contains("\t"))
-            result=str.substring(0,str.indexOf("\t"));
+    public static String getSocketeStringResult(String str) {
+        String result = str.replace("\t", ",");
+        if (result.startsWith(","))
+            result = result.substring(1, result.length() - 1);
+        if (result.endsWith(","))
+            result = result.substring(0, result.length() - 2);
         return result;
     }
+
     public final static int uploadhispic = 1;
     public final static int uploadheader = 2;
 

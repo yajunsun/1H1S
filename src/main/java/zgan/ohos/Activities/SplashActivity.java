@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 import zgan.ohos.GuideIndexActivity;
 import zgan.ohos.MyApplication;
@@ -102,6 +104,19 @@ public class SplashActivity extends myBaseActivity {
                 String result = generalhelper.getSocketeStringResult(frame.strData);
                 if (frame.subCmd == 1 && result.equals("0")) {
                     SystemUtils.setIsLogin(true);
+                    ZganLoginService.toGetServerData(
+                            22, 254,
+                            String.format("001\t%s", PreferenceUtil.getUserName()), handler);//A0000003
+                }
+                else if (frame.subCmd==22)
+                {
+                    Log.v(TAG,result);
+                    Object[]results=result.split(",");
+                    if (results.length>1&& results[0].toString().equals("0"))
+                    {
+                        String unitId=results[1].toString();
+                        PreferenceUtil.setUnitId(unitId);
+                    }
                 }
             } else if (msg.what == 2)//main
             {

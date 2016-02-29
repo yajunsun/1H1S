@@ -6,12 +6,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import zgan.ohos.Dals.UserCommDal;
 import zgan.ohos.R;
 import zgan.ohos.services.login.ZganLoginService;
 import zgan.ohos.utils.Frame;
@@ -30,7 +32,7 @@ public class Register extends myBaseActivity {
     RadioButton rb_access;
     String commName;
     int commId = 0;
-    int unitId=0;
+    String unitId="0";
     String Phone;
     String Pwd;
     String rePwd;
@@ -119,7 +121,6 @@ public class Register extends myBaseActivity {
                         toShowProgress();
                         ZganLoginService.toGetServerData(2, "001\t" + Phone + "\t" + Pwd + "\t0", handler);
                     }
-
                 } catch (Exception ex) {
                     generalhelper.ToastShow(Register.this, ex.getMessage());
                 }
@@ -135,9 +136,19 @@ public class Register extends myBaseActivity {
      */
     private void bindUnit()
     {
-        ZganLoginService.toGetServerData(
-                21, 254,
-                String.format("001\t10086005\t%s",unitId), handler);//A0000003
+        UserCommDal dal=new UserCommDal();
+        try
+        {
+            String unitid=dal.GetUnitId(commId);
+            if (unitid!=null&&!unitid.equals("")&&!unitid.startsWith("failure"))
+            {
+                unitId=unitid;
+                ZganLoginService.toGetServerData(
+                        21, 254,
+                        String.format("001\t%s\t%s", PreferenceUtil.getUserName(), unitId), handler);//A0000003
+            }
+        }
+        catch (Exception e){}
     }
     private Handler handler = new Handler() {
         @Override
@@ -151,20 +162,23 @@ public class Register extends myBaseActivity {
                     SystemUtils.setIsLogin(true);
                     PreferenceUtil.setUserName(Phone);
                     PreferenceUtil.setPassWord(Pwd);
+                    Log.v(TAG, "注册成功");
                     bindUnit();
-                    Intent intent = new Intent(Register.this, MainActivity.class);
-//                    intent.putExtra("phone", Phone);
-//                    intent.putExtra("pwd", Pwd);
-                    startActivity(intent);
-                    finish();
                 } else if (result.equals("24")) {
                     generalhelper.ToastShow(Register.this, "该号码已被注册");
+                    toCloseProgress();
                 }
-                else if (frame.subCmd==21)
+                else if (frame.subCmd==21&& result.equals("0"))
                 {
-                    //绑定单元机成功
+                    Log.v(TAG, "单元机绑定成功");
+                    PreferenceUtil.setUnitId(unitId);
+                    toCloseProgress();
+                    Intent intent = new Intent(Register.this, MainActivity.class);
+                    intent.putExtra("phone", Phone);
+                    intent.putExtra("pwd", Pwd);
+                    startActivity(intent);
+                    finish();
                 }
-                toCloseProgress();
             }
         }
     };

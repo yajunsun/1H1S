@@ -25,4 +25,12 @@ public class UserCommDal extends  baseDal<UserComm> {
         request.addProperty("CommId", CommId);
         return GetExecuteStatus(request, URL, SOAP_ACTION);
     }
+
+    public String GetUnitId(int commId) throws Exception {
+        String SOAP_ACTION = "http://tempuri.org/IEventsContract/GetUnitId";
+        String MethodName = "GetUnitId";
+        SoapObject request = new SoapObject(NameSpace, MethodName);
+        request.addProperty("commId", commId);
+        return GetExecuteStatus(request, URL, SOAP_ACTION);
+    }
 }
