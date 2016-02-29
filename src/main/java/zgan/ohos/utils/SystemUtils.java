@@ -11,7 +11,7 @@ public class SystemUtils {
         return Resources.getSystem().getConfiguration().orientation;
     }
 
-    private static boolean isLogin=true;
+    private static boolean isLogin=false;
     public static final String FORRESULT="forresult";
     public static boolean getIsLogin()
     {

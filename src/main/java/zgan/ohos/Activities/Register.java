@@ -30,6 +30,7 @@ public class Register extends myBaseActivity {
     RadioButton rb_access;
     String commName;
     int commId = 0;
+    int unitId=0;
     String Phone;
     String Pwd;
     String rePwd;
@@ -129,6 +130,15 @@ public class Register extends myBaseActivity {
         }
     }
 
+    /***
+     * 绑定单元机
+     */
+    private void bindUnit()
+    {
+        ZganLoginService.toGetServerData(
+                21, 254,
+                String.format("001\t10086005\t%s",unitId), handler);//A0000003
+    }
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -141,6 +151,7 @@ public class Register extends myBaseActivity {
                     SystemUtils.setIsLogin(true);
                     PreferenceUtil.setUserName(Phone);
                     PreferenceUtil.setPassWord(Pwd);
+                    bindUnit();
                     Intent intent = new Intent(Register.this, MainActivity.class);
 //                    intent.putExtra("phone", Phone);
 //                    intent.putExtra("pwd", Pwd);
@@ -148,6 +159,10 @@ public class Register extends myBaseActivity {
                     finish();
                 } else if (result.equals("24")) {
                     generalhelper.ToastShow(Register.this, "该号码已被注册");
+                }
+                else if (frame.subCmd==21)
+                {
+                    //绑定单元机成功
                 }
                 toCloseProgress();
             }

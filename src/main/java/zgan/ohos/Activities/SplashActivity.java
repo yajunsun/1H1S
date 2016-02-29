@@ -51,7 +51,7 @@ public class SplashActivity extends myBaseActivity {
                         try {
 //                            String userName = PreferenceUtil.getUserName();
 //                            String userPwd = PreferenceUtil.getPassWord();
-                            // SystemUtils.login(userName, userPwd, handler);
+//                             SystemUtils.login(userName, userPwd, handler);
                             while (!ZganLoginService.ServiceRin) {
                                 Thread.currentThread().sleep(100);
                             }

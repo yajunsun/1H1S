@@ -121,7 +121,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                                     "001\t10086005\t20\t5\t2\t0\t0\t0", handler);//A0000003
                             lastOpent = Calendar.getInstance();
                         } else {
-                            generalhelper.ToastShow(getActivity(), "请在" + (5000 - span) / 1000 + "秒后操作");
+                            generalhelper.ToastShow(getActivity(), "请在" + ((5000 - span) / 1000)+1 + "秒后操作");
                         }
                     }
                 else {
