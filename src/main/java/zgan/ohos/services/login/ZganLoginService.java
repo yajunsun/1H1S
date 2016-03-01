@@ -232,9 +232,9 @@ public class ZganLoginService extends Service{
         f.zip=zip;
         f._handler = _handler;
 
-        ztl.toConnectServer();
-
-        ZganLoginService.LoginServerState = 2;
+//        ztl.toConnectServer();
+//
+//        ZganLoginService.LoginServerState = 2;
 
         toGetData(f);
     }

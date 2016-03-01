@@ -51,6 +51,7 @@ import zgan.ohos.services.login.ZganLoginService;
 import zgan.ohos.utils.AppUtils;
 import zgan.ohos.utils.Frame;
 import zgan.ohos.utils.ImageLoader;
+import zgan.ohos.utils.PreferenceUtil;
 import zgan.ohos.utils.SystemUtils;
 import zgan.ohos.utils.generalhelper;
 import zgan.ohos.utils.resultCodes;
@@ -109,7 +110,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                     if (lastOpent == null) {
                         ZganLoginService.toGetServerData(
                                 20, 254,
-                                "001\t10086005\t20\t5\t2\t0\t0\t0", handler);//A0000003
+                                String.format("001\t%s\t%s\t5\t2\t0\t0\t0",PreferenceUtil.getUserName(), PreferenceUtil.getUnitId()), handler);//A0000003
                         lastOpent = Calendar.getInstance();
                     } else {
                         thisCalendar = Calendar.getInstance();
@@ -118,7 +119,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                         if (span > 5000) {
                             ZganLoginService.toGetServerData(
                                     20, 254,
-                                    "001\t10086005\t20\t5\t2\t0\t0\t0", handler);//A0000003
+                                    String.format("001\t%s\t%s\t5\t2\t0\t0\t0",PreferenceUtil.getUserName(), PreferenceUtil.getUnitId()), handler);//A0000003
                             lastOpent = Calendar.getInstance();
                         } else {
                             generalhelper.ToastShow(getActivity(), "请在" + ((5000 - span) / 1000)+1 + "秒后操作");
@@ -313,7 +314,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                         if (SystemUtils.getIsLogin())
                             ZganLoginService.toGetServerData(
                                     20, 254,
-                                    "001\t10086005\t20\t5\t2\t0\t0\t0", handler);//A0000003
+                                    String.format("001\t%s\t%s\t5\t2\t0\t0\t0",PreferenceUtil.getUserName(), PreferenceUtil.getUnitId()), handler);//A0000003
                         else {
                             generalhelper.ToastShow(getActivity(), "未登录");
                             //startActivityIfLogin(null, resultCodes.REMOTEOPEN);

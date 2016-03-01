@@ -102,8 +102,23 @@ public class Login extends myBaseActivity {
                 String result = generalhelper.getSocketeStringResult(frame.strData);
                 if (frame.subCmd == 1 && result.equals("0")) {
                     logined();
+                    ZganLoginService.toGetServerData(
+                            22, 254,
+                            String.format("001\t%s", PhoneNum), handler);//A0000003
+
                 } else if (frame.subCmd == 1 && (result.equals("6") || result.equals("8"))) {
                     generalhelper.ToastShow(Login.this, "用户不存在");
+                }
+                else if (frame.subCmd==22)
+                {
+                    Log.v(TAG,result);
+                    Object[]results=result.split(",");
+                    if (results.length>1&& results[0].toString().equals("0"))
+                    {
+                        String unitId=results[1].toString();
+                        PreferenceUtil.setUnitId(unitId);
+                        Log.v(TAG,unitId);
+                    }
                 }
                 toCloseProgress();
             }

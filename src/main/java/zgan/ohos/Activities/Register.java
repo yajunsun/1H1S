@@ -164,7 +164,7 @@ public class Register extends myBaseActivity {
                     PreferenceUtil.setPassWord(Pwd);
                     Log.v(TAG, "注册成功");
                     bindUnit();
-                } else if (result.equals("24")) {
+                } else if (frame.subCmd == 2 &&result.equals("24")) {
                     generalhelper.ToastShow(Register.this, "该号码已被注册");
                     toCloseProgress();
                 }

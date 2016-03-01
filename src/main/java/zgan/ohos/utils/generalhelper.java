@@ -141,9 +141,9 @@ public final class generalhelper {
     public static String getSocketeStringResult(String str) {
         String result = str.replace("\t", ",");
         if (result.startsWith(","))
-            result = result.substring(1, result.length() - 1);
+            result = result.substring(1, result.length());
         if (result.endsWith(","))
-            result = result.substring(0, result.length() - 2);
+            result = result.substring(0, result.length() - 1);
         return result;
     }
 
