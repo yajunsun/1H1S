@@ -174,7 +174,6 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
 
                 intent = new Intent(getActivity(), Login.class);
                 startActivity(intent);
-                getActivity().finish();
                 break;
             case R.id.rl_binddevice:
                 intent=new Intent(getActivity(), BindDevice.class);
