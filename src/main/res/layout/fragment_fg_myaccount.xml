@@ -154,5 +154,38 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_binddevice"
+
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/rl_logout"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/draw_normalitem_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="绑定室内机"
+            android:textColor="@color/shishiwuye_big_txt_color"
+            android:textSize="@dimen/myaccount_txt_size" />
+
+
+
+        <ImageView
+            android:id="@+id/iv_binddevice"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

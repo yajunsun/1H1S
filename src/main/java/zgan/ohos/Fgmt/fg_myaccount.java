@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import zgan.ohos.Activities.BindDevice;
 import zgan.ohos.Activities.Login;
 import zgan.ohos.Activities.UpdatePassword;
 import zgan.ohos.ConstomControls.RoundImageViewByXfermode;
@@ -50,8 +51,8 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
 
     Toolbar toolbar;
     RoundImageViewByXfermode iv_header;
-    ImageView iv_updateheader, iv_updatepwd, iv_logout;
-    View ll_header, rl_updateheader, rl_updatepwd, rl_logout;
+    ImageView iv_updateheader, iv_updatepwd, iv_logout,iv_binddevice;
+    View ll_header, rl_updateheader, rl_updatepwd, rl_logout,rl_binddevice;
     ImageLoader imageLoader;
     boolean headerchanged = false;
     String LOCALHEADERFILENAME = PreferenceUtil.getUserName() + "_header";
@@ -137,15 +138,19 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
         iv_updateheader = (ImageView) view.findViewById(R.id.iv_updateheader);
         iv_updatepwd = (ImageView) view.findViewById(R.id.iv_updatepwd);
         iv_logout = (ImageView) view.findViewById(R.id.iv_logout);
+        iv_binddevice=(ImageView)view.findViewById(R.id.iv_binddevice);
         rl_updateheader = view.findViewById(R.id.rl_updateheader);
         rl_updatepwd = view.findViewById(R.id.rl_updatepwd);
         rl_logout = view.findViewById(R.id.rl_logout);
+        rl_binddevice=view.findViewById(R.id.rl_binddevice);
         rl_updateheader.setOnClickListener(this);
         rl_updatepwd.setOnClickListener(this);
         rl_logout.setOnClickListener(this);
+        rl_binddevice.setOnClickListener(this);
         iv_updateheader.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_chevron_right).colorRes(R.color.color_sc_bg).sizeDp(12));
         iv_updatepwd.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_chevron_right).colorRes(R.color.color_sc_bg).sizeDp(12));
         iv_logout.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_chevron_right).colorRes(R.color.color_sc_bg).sizeDp(12));
+        iv_binddevice.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_chevron_right).colorRes(R.color.color_sc_bg).sizeDp(12));
         txt_account=(TextView)view.findViewById(R.id.txt_account);
         txt_account.setText(PreferenceUtil.getUserName());
         return view;
@@ -169,7 +174,11 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
 
                 intent = new Intent(getActivity(), Login.class);
                 startActivity(intent);
-                //getActivity().finish();
+                getActivity().finish();
+                break;
+            case R.id.rl_binddevice:
+                intent=new Intent(getActivity(), BindDevice.class);
+                startActivityWithAnim(getActivity(), intent);
                 break;
             case R.id.btn_fromsd:
                 doPickPhotoFromGallery();// 从相册中去获取

@@ -110,7 +110,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                     if (lastOpent == null) {
                         ZganLoginService.toGetServerData(
                                 20, 254,
-                                String.format("001\t%s\t%s\t5\t2\t0\t0\t0",PreferenceUtil.getUserName(), PreferenceUtil.getUnitId()), handler);//A0000003
+                                String.format("%s\t%s",PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName()), handler);//A0000003
                         lastOpent = Calendar.getInstance();
                     } else {
                         thisCalendar = Calendar.getInstance();
@@ -119,10 +119,10 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                         if (span > 5000) {
                             ZganLoginService.toGetServerData(
                                     20, 254,
-                                    String.format("001\t%s\t%s\t5\t2\t0\t0\t0",PreferenceUtil.getUserName(), PreferenceUtil.getUnitId()), handler);//A0000003
+                                    String.format("%s\t%s",PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName()), handler);//A0000003
                             lastOpent = Calendar.getInstance();
                         } else {
-                            generalhelper.ToastShow(getActivity(), "请在" + ((5000 - span) / 1000)+1 + "秒后操作");
+                            generalhelper.ToastShow(getActivity(), "请在" + ((5000 - span) / 1000+1) + "秒后操作");
                         }
                     }
                 else {
@@ -314,7 +314,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                         if (SystemUtils.getIsLogin())
                             ZganLoginService.toGetServerData(
                                     20, 254,
-                                    String.format("001\t%s\t%s\t5\t2\t0\t0\t0",PreferenceUtil.getUserName(), PreferenceUtil.getUnitId()), handler);//A0000003
+                                    String.format("%s\t%s",PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName()), handler);//A0000003
                         else {
                             generalhelper.ToastShow(getActivity(), "未登录");
                             //startActivityIfLogin(null, resultCodes.REMOTEOPEN);

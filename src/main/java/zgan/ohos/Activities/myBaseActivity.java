@@ -37,7 +37,7 @@ public abstract class myBaseActivity extends AppCompatActivity {
             if (intent.getAction().equals(ZganLoginService.ZGAN_SOCKETE_ERR)) {
                 Bundle bundle = intent.getExtras();
                 String msg = bundle.getString("msg");
-                Log.v(TAG,"网络状态："+msg);
+                Log.v(TAG, "网络状态：" + msg);
                 if (ll_net_error != null) {
                     if (msg.equals("1")) {
                         ll_net_error.setVisibility(View.GONE);
@@ -82,21 +82,21 @@ public abstract class myBaseActivity extends AppCompatActivity {
 
 
     public void startActivityWithAnim(Intent intent) {
-        if (Build.VERSION.SDK_INT > 20)
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        else {
-            startActivity(intent);
-            overridePendingTransition(R.animator.enter, R.animator.exit);
-        }
+//        if (Build.VERSION.SDK_INT > 20)
+//            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+//        else {
+        startActivity(intent);
+        overridePendingTransition(R.animator.enter, R.animator.exit);
+        // }
     }
 
     public void startActivityWithAnimForResult(Intent intent, int requestCode) {
-        if (Build.VERSION.SDK_INT > 20)
-            startActivityForResult(intent, requestCode, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        else {
+//        if (Build.VERSION.SDK_INT > 20)
+//            startActivityForResult(intent, requestCode, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+//        else {
             startActivityForResult(intent, requestCode);
             overridePendingTransition(R.animator.enter, R.animator.exit);
-        }
+        //}
     }
 
     protected abstract void initView();

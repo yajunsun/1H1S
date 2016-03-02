@@ -30,9 +30,7 @@ public class Register extends myBaseActivity {
     EditText et_pwd;
     EditText et_repwd;
     RadioButton rb_access;
-    String commName;
-    int commId = 0;
-    String unitId="0";
+    int communityId = 4;
     String Phone;
     String Pwd;
     String rePwd;
@@ -47,10 +45,9 @@ public class Register extends myBaseActivity {
     protected void initView() {
         setContentView(R.layout.lo_activity_register);
         Intent thisIntent = getIntent();
-        toolbar =(Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        commName = thisIntent.getStringExtra("commname");
-        commId = thisIntent.getIntExtra("commid", 0);
+        communityId = thisIntent.getIntExtra("communityid", 4);
         til_Phone = (TextInputLayout) findViewById(R.id.til_phone);
         til_pwd = (TextInputLayout) findViewById(R.id.til_pwd);
         til_repwd = (TextInputLayout) findViewById(R.id.til_repwd);
@@ -66,7 +63,7 @@ public class Register extends myBaseActivity {
                 btnRegister.setEnabled(isChecked);
             }
         });
-        View back=findViewById(R.id.back);
+        View back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,8 +75,8 @@ public class Register extends myBaseActivity {
     public void ViewClick(View view) {
         switch (view.getId()) {
             case R.id.btn_register:
-                boolean CheckName=false;
-                boolean CheckPwd=false;
+                boolean CheckName = false;
+                boolean CheckPwd = false;
                 Phone = et_Phone.getText().toString().trim();
                 Pwd = et_pwd.getText().toString().trim();
                 rePwd = et_repwd.getText().toString().trim();
@@ -90,7 +87,7 @@ public class Register extends myBaseActivity {
                     til_Phone.setError("电话号码填写错误");
                     til_Phone.setErrorEnabled(true);
                 } else {
-                    CheckName=true;
+                    CheckName = true;
                     til_Phone.setErrorEnabled(false);
                 }
                 if (Pwd.length() == 0) {
@@ -100,26 +97,26 @@ public class Register extends myBaseActivity {
                     til_pwd.setError("密码长度不能超过20位");
                     til_pwd.setErrorEnabled(true);
                 } else {
-                    CheckPwd=true;
+                    CheckPwd = true;
                     til_pwd.setErrorEnabled(false);
                 }
                 if (rePwd.length() == 0) {
-                    CheckPwd=false;
+                    CheckPwd = false;
                     til_repwd.setError("重复密码不能为空");
                     til_repwd.setErrorEnabled(true);
                 } else if (!rePwd.equals(Pwd)) {
-                    CheckPwd=false;
+                    CheckPwd = false;
                     til_repwd.setError("两次输入密码不一样");
                     til_repwd.setErrorEnabled(true);
                 } else {
-                    CheckPwd=true;
+                    CheckPwd = true;
                     til_repwd.setErrorEnabled(false);
                 }
                 try {
-                    if (CheckName&&CheckPwd) {
+                    if (CheckName && CheckPwd) {
                         toSetProgressText("请稍后...");
                         toShowProgress();
-                        ZganLoginService.toGetServerData(2, "001\t" + Phone + "\t" + Pwd + "\t0", handler);
+                        ZganLoginService.toGetServerData(2, communityId+"\t" + Phone + "\t" + Pwd + "\t0", handler);
                     }
                 } catch (Exception ex) {
                     generalhelper.ToastShow(Register.this, ex.getMessage());
@@ -131,25 +128,6 @@ public class Register extends myBaseActivity {
         }
     }
 
-    /***
-     * 绑定单元机
-     */
-    private void bindUnit()
-    {
-        UserCommDal dal=new UserCommDal();
-        try
-        {
-            String unitid=dal.GetUnitId(commId);
-            if (unitid!=null&&!unitid.equals("")&&!unitid.startsWith("failure"))
-            {
-                unitId=unitid;
-                ZganLoginService.toGetServerData(
-                        21, 254,
-                        String.format("001\t%s\t%s", PreferenceUtil.getUserName(), unitId), handler);//A0000003
-            }
-        }
-        catch (Exception e){}
-    }
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -162,29 +140,24 @@ public class Register extends myBaseActivity {
                     SystemUtils.setIsLogin(true);
                     PreferenceUtil.setUserName(Phone);
                     PreferenceUtil.setPassWord(Pwd);
+                    PreferenceUtil.setCommunityId(String.valueOf(communityId));
                     Log.v(TAG, "注册成功");
-                    bindUnit();
-                } else if (frame.subCmd == 2 &&result.equals("24")) {
-                    generalhelper.ToastShow(Register.this, "该号码已被注册");
-                    toCloseProgress();
-                }
-                else if (frame.subCmd==21&& result.equals("0"))
-                {
-                    Log.v(TAG, "单元机绑定成功");
-                    PreferenceUtil.setUnitId(unitId);
-                    toCloseProgress();
                     Intent intent = new Intent(Register.this, MainActivity.class);
                     intent.putExtra("phone", Phone);
                     intent.putExtra("pwd", Pwd);
                     startActivity(intent);
                     finish();
+                } else if (frame.subCmd == 2 && result.equals("24")) {
+                    generalhelper.ToastShow(Register.this, "该号码已被注册");
+                    toCloseProgress();
                 }
+                toCloseProgress();
             }
         }
     };
+
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(null);
     }

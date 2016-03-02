@@ -44,8 +44,8 @@ public class Login extends myBaseActivity {
     }
 
     public void ViewClick(View view) {
-        boolean CheckName=false;
-        boolean CheckPwd=false;
+        boolean CheckName = false;
+        boolean CheckPwd = false;
         switch (view.getId()) {
             case R.id.btn_login:
                 String Phone = et_Phone.getText().toString().trim();
@@ -57,7 +57,7 @@ public class Login extends myBaseActivity {
                     til_Phone.setError("电话号码填写错误");
                     til_Phone.setErrorEnabled(true);
                 } else {
-                    CheckName=true;
+                    CheckName = true;
                     til_Phone.setErrorEnabled(false);
                 }
                 if (Pwd.length() == 0) {
@@ -67,11 +67,11 @@ public class Login extends myBaseActivity {
                     til_pwd.setError("密码长度不能超过20位");
                     til_pwd.setErrorEnabled(true);
                 } else {
-                    CheckPwd=true;
+                    CheckPwd = true;
                     til_pwd.setErrorEnabled(false);
                 }
                 try {
-                    if (CheckName&&CheckPwd) {
+                    if (CheckName && CheckPwd) {
                         toSetProgressText("请稍等...");
                         toShowProgress();
                         this.PhoneNum = Phone;
@@ -102,23 +102,19 @@ public class Login extends myBaseActivity {
                 String result = generalhelper.getSocketeStringResult(frame.strData);
                 if (frame.subCmd == 1 && result.equals("0")) {
                     logined();
-                    ZganLoginService.toGetServerData(
-                            22, 254,
-                            String.format("001\t%s", PhoneNum), handler);//A0000003
-
+                    ZganLoginService.toGetServerData(24, 0, PreferenceUtil.getUserName(), handler);
                 } else if (frame.subCmd == 1 && (result.equals("6") || result.equals("8"))) {
                     generalhelper.ToastShow(Login.this, "用户不存在");
-                }
-                else if (frame.subCmd==22)
-                {
-                    Log.v(TAG,result);
-                    Object[]results=result.split(",");
-                    if (results.length>1&& results[0].toString().equals("0"))
-                    {
-                        String unitId=results[1].toString();
-                        PreferenceUtil.setUnitId(unitId);
-                        Log.v(TAG,unitId);
+                } else if (frame.subCmd == 24) {
+                    String communityId = PreferenceUtil.getCommunityId();
+                    String results[] = result.split(",");
+                    if (results.length == 2 && results[0].equals("0")) {
+                        Log.v(TAG, "小区ID：" + results[1]);
+                        if (!communityId.equals(results[1])) {
+                            PreferenceUtil.setCommunityId(results[1]);
+                        }
                     }
+                    finish();
                 }
                 toCloseProgress();
             }
@@ -143,7 +139,6 @@ public class Login extends myBaseActivity {
             //MyApplication.appUser.setPhoneNum(PhoneNum);
             startActivity(returnintent);
         }
-        finish();
     }
 
     @Override

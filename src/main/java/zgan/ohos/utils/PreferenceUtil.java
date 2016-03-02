@@ -19,7 +19,6 @@ public class PreferenceUtil {
     private static final String Field_UsedTimes = "zgan.ohos.UsedTimes";
     private static final String Field_LastVersion = "zgan.ohos.LastVersion";
     private static String Field_CommunityId;
-    private static String Field_UnitId;
 
     private static PreferenceUtil preferenceUtil;
 
@@ -53,7 +52,9 @@ public class PreferenceUtil {
      */
     public static String getUserName() {
         try {
-            return getInstance(MyApplication.context).getString(Field_UserNmae, "");
+            String username= getInstance(MyApplication.context).getString(Field_UserNmae, "");
+            Field_CommunityId="zgan.ohos."+username;
+            return username;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,7 +68,6 @@ public class PreferenceUtil {
         try {
             getInstance(MyApplication.context).saveString(Field_UserNmae, username);
             Field_CommunityId="zgan.ohos."+username;
-            Field_UnitId="zgan.ohos."+username;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,23 +178,7 @@ public class PreferenceUtil {
             e.printStackTrace();
         }
     }
-    public static String getUnitId()
-    {
-        try {
-            return getInstance(MyApplication.context).getString(Field_UnitId, "0");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "0";
-    }
-    public static void setUnitId(String unitId)
-    {
-        try {
-            getInstance(MyApplication.context).saveString(Field_UnitId, unitId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
     public void saveLong(String key, long l) {
         ed.putLong(key, l);
         ed.commit();

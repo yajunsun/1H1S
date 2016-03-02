@@ -9,6 +9,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -27,6 +28,7 @@ public class GuideIndexActivity extends Activity {
 
     ViewPager guidpager;
     LinearLayout viewGoup;
+    Button btn_go;
     boolean isContinue = true;
     List<ImageView> imageViews = new ArrayList<>();
     private AtomicInteger what = new AtomicInteger(0);
@@ -37,6 +39,17 @@ public class GuideIndexActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_index);
+        btn_go=(Button)findViewById(R.id.btn_go);
+        btn_go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PreferenceUtil.setUsedTimes(1);
+                Intent intent = new Intent(GuideIndexActivity.this, zgan.ohos.Activities.MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.animator.enter, R.animator.exit);
+                finish();
+            }
+        });
         guidpager = (ViewPager) findViewById(R.id.guid_pager);
         guidpager.setVisibility(View.VISIBLE);
         guidpager.setAdapter(new AdvAdapter());
@@ -105,6 +118,7 @@ public class GuideIndexActivity extends Activity {
                     PreferenceUtil.setUsedTimes(1);
                     Intent intent = new Intent(GuideIndexActivity.this, zgan.ohos.Activities.MainActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.animator.enter, R.animator.exit);
                     finish();
                 }
             });

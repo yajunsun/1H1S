@@ -24,10 +24,10 @@
                 android:id="@+id/back"
                 style="?android:actionButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_marginLeft="@dimen/back_icon_left_margin"
                 android:layout_height="fill_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/back_icon_left_margin"
                 android:clickable="true">
 
                 <com.mikepenz.iconics.view.IconicsImageView
@@ -53,144 +53,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         android:layout_margin="10dp"
-        android:background="@drawable/bg_register_outer"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/rl_commselect"
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_below="@id/ll_header"
-            android:focusable="true"
-            android:onClick="ViewClick"
-            android:padding="5dp">
 
-            <TextView
-                android:id="@+id/txt1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:text="家庭住址"
-                android:textColor="@color/shishiwuye_big_txt_color"
-                android:textSize="@dimen/shishiwuye_big_txt_size" />
-
-            <TextView
-                android:id="@+id/txt_commname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/txt1"
-                android:text="请选择小区"
-                android:textColor="@color/shishiwuye_sm_txt_color"
-                android:textSize="@dimen/shishiwuye_sm_txt_size" />
-
-            <ImageView
-                android:id="@+id/iv_myorder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@color/icon_base_color"></LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_header"
-            android:focusable="true"
-            android:padding="5dp">
-
-            <TextView
-                android:id="@+id/txt2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:text="业主姓名"
-                android:textColor="@color/shishiwuye_big_txt_color"
-                android:textSize="@dimen/shishiwuye_big_txt_size" />
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_yzname"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/txt2">
-
-                <EditText
-                    android:id="@+id/input_yzname"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:gravity="top"
-                    android:hint="请输入业主姓名"
-                    android:textColor="@color/shishiwuye_big_txt_color"
-                    android:textSize="@dimen/shishiwuye_big_txt_size" />
-            </android.support.design.widget.TextInputLayout>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@color/icon_base_color"></LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_header"
-            android:focusable="true"
-            android:padding="5dp">
-
-            <TextView
-                android:id="@+id/txt3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:text="业主电话"
-                android:textColor="@color/shishiwuye_big_txt_color"
-                android:textSize="@dimen/shishiwuye_big_txt_size" />
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_yzphone"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/txt3">
-
-                <EditText
-                    android:id="@+id/input_yzphone"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:gravity="top"
-                    android:hint="请输入业主电话号码"
-                    android:textColor="@color/shishiwuye_big_txt_color"
-                    android:textSize="@dimen/shishiwuye_big_txt_size" />
-            </android.support.design.widget.TextInputLayout>
-        </RelativeLayout>
-
+      <ListView
+          android:layout_width="match_parent"
+          android:layoutAnimation="@anim/listview_anim"
+          android:id="@+id/lst_community"
+          android:layout_height="match_parent" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_register_step1"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:layout_below="@id/input"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/login_done"
-        android:onClick="ViewClick"
-        android:text="下一步"
-        android:textColor="@color/color_txt_toobar"
-        android:textSize="@dimen/toolbar_title_size" />
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.util.Log;
 import zgan.ohos.services.push.ZganSocketClient;
 import zgan.ohos.utils.Frame;
 import zgan.ohos.utils.FrameTools;
+import zgan.ohos.utils.PreferenceUtil;
 import zgan.ohos.utils.SystemUtils;
 import zgan.ohos.utils.generalhelper;
 
@@ -18,18 +19,30 @@ public class ZganLoginService_Listen implements Runnable {
     //public static int LoginServerState = 0;
     public static int ServerState = 0;
     private Context _context;
-    private boolean iniNetState=false;
+    private boolean iniNetState = false;
     //子线程中的handler，用于APP网络连接后的自动登录操作
-    Handler myhandler= new Handler(Looper.myLooper()){
+    Handler myhandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {//autologin
                 Frame frame = (Frame) msg.obj;
                 String result = generalhelper.getSocketeStringResult(frame.strData);
-                if (frame.subCmd == 1 && result.equals("0")) {
+                String[] results = result.split(",");
+                if (frame.subCmd == 1 && results[0].equals("0")) {
                     SystemUtils.setIsLogin(true);
-                    Log.v("suntest","自动登录");
+                    ZganLoginService.toGetServerData(24, 0, PreferenceUtil.getUserName(), myhandler);
+                    Log.v("suntest", "自动重新登录成功");
+                } else if (frame.subCmd == 24) {
+                    String communityId = PreferenceUtil.getCommunityId();
+                    if (results.length == 2 && results[0].equals("0")) {
+                        Log.v("suntest", "小区ID：" + results[1]);
+                        if (!communityId.equals(results[1])) {
+                            PreferenceUtil.setCommunityId(results[1]);
+                        }
+                    }
+                } else {
+                    Log.v("suntest", "自动重新登录失败");
                 }
             }
         }
@@ -50,7 +63,7 @@ public class ZganLoginService_Listen implements Runnable {
         zsc.toStartPing(1, FrameTools.Frame_MainCmd_Ping);
         zsc.ThreadName = "ZganLoginService";
         boolean isNet = ZganLoginService.isNetworkAvailable(_context);
-        iniNetState=isNet;
+        iniNetState = isNet;
         while (true) {
 
             try {
@@ -59,16 +72,15 @@ public class ZganLoginService_Listen implements Runnable {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-             isNet = ZganLoginService.isNetworkAvailable(_context);
+            isNet = ZganLoginService.isNetworkAvailable(_context);
 
             if (ServerState == 1) {
                 //用户打开网络后自动登录操作
-                if (!iniNetState)
-                {
-                    iniNetState=true;
+                if (!iniNetState) {
+                    iniNetState = true;
                     ZganLoginService.toAutoUserLogin(myhandler);
                 }
-                    if (!isNet) {
+                if (!isNet) {
                     ServerState = 2;
                     ZganLoginService.BroadError("网络连接错误");
                     Log.v("suntest", "1ServerState=" + ServerState);
@@ -90,7 +102,7 @@ public class ZganLoginService_Listen implements Runnable {
                     Log.i("ZganJTWSService_Listen", "重新连接");
                     Log.v("suntest", "client 重新连接");
                     ServerState = 3;
-                    zsc.Server_IP=ZganLoginService.toGetHostIP();
+                    zsc.Server_IP = ZganLoginService.toGetHostIP();
                     Log.v("suntest", "connect to=" + zsc.Server_IP);
                     if (zsc.toConnectServer()) {
                         ServerState = 1;

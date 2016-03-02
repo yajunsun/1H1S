@@ -102,22 +102,23 @@ public class SplashActivity extends myBaseActivity {
             } else if (msg.what == 1) {//autologin
                 Frame frame = (Frame) msg.obj;
                 String result = generalhelper.getSocketeStringResult(frame.strData);
-                if (frame.subCmd == 1 && result.equals("0")) {
+                String[] results=result.split(",");
+                if (frame.subCmd == 1 && results[0].equals("0")) {
                     SystemUtils.setIsLogin(true);
-                    ZganLoginService.toGetServerData(
-                            22, 254,
-                            String.format("001\t%s", PreferenceUtil.getUserName()), handler);//A0000003
+                    ZganLoginService.toGetServerData(24,0,PreferenceUtil.getUserName(),handler);
+                    Log.v("suntest","自动登录成功");
                 }
-                else if (frame.subCmd==22)
+                else if (frame.subCmd==24)
                 {
-                    Log.v(TAG,result);
-                    Object[]results=result.split(",");
-                    if (results.length>1&& results[0].toString().equals("0"))
-                    {
-                        String unitId=results[1].toString();
-                        PreferenceUtil.setUnitId(unitId);
+                    String communityId = PreferenceUtil.getCommunityId();
+                    if (results.length == 2 && results[0].equals("0")) {
+                        Log.v(TAG, "小区ID：" + results[1]);
+                        if (!communityId.equals(results[1])) {
+                            PreferenceUtil.setCommunityId(results[1]);
+                        }
                     }
                 }
+
             } else if (msg.what == 2)//main
             {
                 int usedTimes = PreferenceUtil.getUsedTimes();
