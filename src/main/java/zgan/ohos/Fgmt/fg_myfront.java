@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import zgan.ohos.Activities.BindDevice;
 import zgan.ohos.Activities.CommunityCommercial;
 import zgan.ohos.Activities.DailyBreakfirst;
 import zgan.ohos.Activities.EventList;
@@ -108,21 +109,17 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                 if (SystemUtils.getIsLogin())
                     //第一次开门
                     if (lastOpent == null) {
-                        ZganLoginService.toGetServerData(
-                                20, 254,
-                                String.format("%s\t%s",PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName()), handler);//A0000003
+                        remoteOpen();
                         lastOpent = Calendar.getInstance();
                     } else {
                         thisCalendar = Calendar.getInstance();
                         long span = thisCalendar.getTimeInMillis() - lastOpent.getTimeInMillis();
                         //判断上次点击开门和本次点击开门时间间隔是否大于5秒钟
                         if (span > 5000) {
-                            ZganLoginService.toGetServerData(
-                                    20, 254,
-                                    String.format("%s\t%s",PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName()), handler);//A0000003
+                            remoteOpen();
                             lastOpent = Calendar.getInstance();
                         } else {
-                            generalhelper.ToastShow(getActivity(), "请在" + ((5000 - span) / 1000+1) + "秒后操作");
+                            generalhelper.ToastShow(getActivity(), "请在" + ((5000 - span) / 1000 + 1) + "秒后操作");
                         }
                     }
                 else {
@@ -216,6 +213,25 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                 houseHoldingDialog.dismiss();
             }
         });
+        /*****打开单元门时发现未绑定室内机则提示*****/
+        final AlertDialog.Builder openbuilder = new AlertDialog.Builder(getActivity());
+        openbuilder.setTitle("您的手机号码还没有与室内机绑定，是否现在绑定？");
+        openbuilder.setPositiveButton("是的", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), BindDevice.class);
+                startActivityWithAnim(getActivity(), intent);
+                opendialog.dismiss();
+            }
+        });
+        openbuilder.setCancelable(true);
+        openbuilder.setNegativeButton("下次绑定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                opendialog.dismiss();
+            }
+        });
+        opendialog = openbuilder.create();
     }
 
     private void initView(View v) {
@@ -253,6 +269,16 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
         iv_message.setOnClickListener(this);
         ll_eventaction.setOnClickListener(this);
         loadSampleImage();
+    }
+
+    private void remoteOpen() {
+        if (PreferenceUtil.getCommunityId().equals("0") || PreferenceUtil.getCommunityId().equals("")) {
+            opendialog.show();
+        } else {
+            ZganLoginService.toGetServerData(
+                    20, 254,
+                    String.format("%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName()), handler);//A0000003
+        }
     }
 
     @Override
@@ -312,9 +338,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                         break;
                     case resultCodes.REMOTEOPEN:
                         if (SystemUtils.getIsLogin())
-                            ZganLoginService.toGetServerData(
-                                    20, 254,
-                                    String.format("%s\t%s",PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName()), handler);//A0000003
+                            remoteOpen();
                         else {
                             generalhelper.ToastShow(getActivity(), "未登录");
                             //startActivityIfLogin(null, resultCodes.REMOTEOPEN);

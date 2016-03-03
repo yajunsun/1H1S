@@ -51,12 +51,12 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
 
     Toolbar toolbar;
     RoundImageViewByXfermode iv_header;
-    ImageView iv_updateheader, iv_updatepwd, iv_logout,iv_binddevice;
-    View ll_header, rl_updateheader, rl_updatepwd, rl_logout,rl_binddevice;
+    ImageView iv_updateheader, iv_updatepwd, iv_logout, iv_binddevice;
+    View ll_header, rl_updateheader, rl_updatepwd, rl_logout, rl_binddevice;
     ImageLoader imageLoader;
     boolean headerchanged = false;
-    String LOCALHEADERFILENAME = PreferenceUtil.getUserName() + "_header";
-    File pictureFile = picturefile.getdochead(LOCALHEADERFILENAME);
+    String LOCALHEADERFILENAME ;
+    File pictureFile;
     LayoutInflater myInflater;
     Dialog headerSelectDialog;
     TextView txt_account;
@@ -69,7 +69,7 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
                 if (data != null) {
                     Uri uri;
                     if (data.hasExtra("data")) {
-                        Log.v(TAG,"bitmap data");
+                        Log.v(TAG, "bitmap data");
                         Bitmap photo = data.getParcelableExtra("data");
                         try {
                             /************ 保存图像 ******************/
@@ -90,24 +90,22 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
                         }
                         iv_header.setImageBitmap(photo);
                     } else if ((uri = data.getData()) != null) {
-                        Log.v(TAG,"uri data");
+                        Log.v(TAG, "uri data");
                         doCropPhoto(uri);
                     }
                     /***********************************/
                     // 下面就是显示照片了
 
                     headerSelectDialog.dismiss();
-                }
-                else
-                {
-                    Log.v(TAG,"data is null");
+                } else {
+                    Log.v(TAG, "data is null");
                 }
             }
             break;
             case CAMERA_WITH_DATA: {// 照相机程序返回的,再次调用图片剪辑程序去修剪图片
                 if (mCurrentPhotoFile.exists())
-                    Log.v(TAG,mCurrentPhotoFile.getPath());
-                    doCropPhoto(mCurrentPhotoFile);
+                    Log.v(TAG, mCurrentPhotoFile.getPath());
+                doCropPhoto(mCurrentPhotoFile);
             }
             break;
         }
@@ -131,29 +129,33 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
 //            }
 //        }, p.x, (int) (Integer.valueOf(getResources().getString(R.string.myaccount_header_Height)) * AppUtils.getDensity(getActivity())));
         iv_header = (RoundImageViewByXfermode) view.findViewById(R.id.iv_header);
-        if (pictureFile != null && pictureFile.exists())
-            iv_header.setImageBitmap(BitmapFactory.decodeFile(pictureFile.getPath()));
-        else
-            iv_header.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_account_box).colorRes(R.color.md_white_1000));
+
         iv_updateheader = (ImageView) view.findViewById(R.id.iv_updateheader);
         iv_updatepwd = (ImageView) view.findViewById(R.id.iv_updatepwd);
         iv_logout = (ImageView) view.findViewById(R.id.iv_logout);
-        iv_binddevice=(ImageView)view.findViewById(R.id.iv_binddevice);
+        iv_binddevice = (ImageView) view.findViewById(R.id.iv_binddevice);
         rl_updateheader = view.findViewById(R.id.rl_updateheader);
         rl_updatepwd = view.findViewById(R.id.rl_updatepwd);
         rl_logout = view.findViewById(R.id.rl_logout);
-        rl_binddevice=view.findViewById(R.id.rl_binddevice);
+        rl_binddevice = view.findViewById(R.id.rl_binddevice);
         rl_updateheader.setOnClickListener(this);
         rl_updatepwd.setOnClickListener(this);
         rl_logout.setOnClickListener(this);
         rl_binddevice.setOnClickListener(this);
-        iv_updateheader.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_chevron_right).colorRes(R.color.color_sc_bg).sizeDp(12));
-        iv_updatepwd.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_chevron_right).colorRes(R.color.color_sc_bg).sizeDp(12));
-        iv_logout.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_chevron_right).colorRes(R.color.color_sc_bg).sizeDp(12));
-        iv_binddevice.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_chevron_right).colorRes(R.color.color_sc_bg).sizeDp(12));
-        txt_account=(TextView)view.findViewById(R.id.txt_account);
-        txt_account.setText(PreferenceUtil.getUserName());
+        txt_account = (TextView) view.findViewById(R.id.txt_account);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LOCALHEADERFILENAME = PreferenceUtil.getUserName() + "_header";
+        pictureFile = picturefile.getdochead(LOCALHEADERFILENAME);
+        if (pictureFile != null && pictureFile.exists())
+            iv_header.setImageBitmap(BitmapFactory.decodeFile(pictureFile.getPath()));
+        else
+            iv_header.setImageDrawable(new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_account_box).colorRes(R.color.md_white_1000));
+        txt_account.setText(PreferenceUtil.getUserName());
     }
 
     @Override
@@ -176,7 +178,7 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.rl_binddevice:
-                intent=new Intent(getActivity(), BindDevice.class);
+                intent = new Intent(getActivity(), BindDevice.class);
                 startActivityWithAnim(getActivity(), intent);
                 break;
             case R.id.btn_fromsd:

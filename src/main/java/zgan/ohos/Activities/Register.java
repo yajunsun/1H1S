@@ -30,7 +30,7 @@ public class Register extends myBaseActivity {
     EditText et_pwd;
     EditText et_repwd;
     RadioButton rb_access;
-    int communityId = 4;
+    //int communityId = 4;
     String Phone;
     String Pwd;
     String rePwd;
@@ -47,7 +47,7 @@ public class Register extends myBaseActivity {
         Intent thisIntent = getIntent();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        communityId = thisIntent.getIntExtra("communityid", 4);
+        //communityId = thisIntent.getIntExtra("communityid", 4);
         til_Phone = (TextInputLayout) findViewById(R.id.til_phone);
         til_pwd = (TextInputLayout) findViewById(R.id.til_pwd);
         til_repwd = (TextInputLayout) findViewById(R.id.til_repwd);
@@ -116,7 +116,8 @@ public class Register extends myBaseActivity {
                     if (CheckName && CheckPwd) {
                         toSetProgressText("请稍后...");
                         toShowProgress();
-                        ZganLoginService.toGetServerData(2, communityId+"\t" + Phone + "\t" + Pwd + "\t0", handler);
+                        //ZganLoginService.toGetServerData(2, communityId + "\t" + Phone + "\t" + Pwd + "\t0", handler);
+                        ZganLoginService.toGetServerData(2, Phone + "\t" + Pwd + "\t0", handler);
                     }
                 } catch (Exception ex) {
                     generalhelper.ToastShow(Register.this, ex.getMessage());
@@ -140,18 +141,17 @@ public class Register extends myBaseActivity {
                     SystemUtils.setIsLogin(true);
                     PreferenceUtil.setUserName(Phone);
                     PreferenceUtil.setPassWord(Pwd);
-                    PreferenceUtil.setCommunityId(String.valueOf(communityId));
+                    //PreferenceUtil.setCommunityId(String.valueOf(communityId));
                     Log.v(TAG, "注册成功");
-                    Intent intent = new Intent(Register.this, MainActivity.class);
-                    intent.putExtra("phone", Phone);
-                    intent.putExtra("pwd", Pwd);
-                    startActivity(intent);
+                    Intent intent = new Intent(Register.this, BindDevice.class);
+                    intent.putExtra("showcancel", true);
+                    startActivityWithAnim(intent);
+                    toCloseProgress();
                     finish();
                 } else if (frame.subCmd == 2 && result.equals("24")) {
                     generalhelper.ToastShow(Register.this, "该号码已被注册");
                     toCloseProgress();
                 }
-                toCloseProgress();
             }
         }
     };
@@ -159,6 +159,5 @@ public class Register extends myBaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(null);
     }
 }

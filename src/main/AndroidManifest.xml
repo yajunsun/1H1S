@@ -54,6 +54,7 @@
             android:label="@string/news_option_name" />
         <activity
             android:name=".Activities.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.HouseHoldingChat"

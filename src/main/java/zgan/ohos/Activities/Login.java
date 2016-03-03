@@ -87,7 +87,7 @@ public class Login extends myBaseActivity {
                 break;
             case R.id.btn_register:
                 //Intent intent = new Intent(Login.this, UserCommSelect.class);
-                Intent intent = new Intent(Login.this, RegisterStep1.class);
+                Intent intent = new Intent(Login.this, Register.class);
                 startActivityWithAnim(intent);
                 break;
         }

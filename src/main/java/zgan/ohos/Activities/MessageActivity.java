@@ -27,6 +27,9 @@ import java.util.List;
 import zgan.ohos.Dals.MessageDal;
 import zgan.ohos.Models.Message;
 import zgan.ohos.R;
+import zgan.ohos.services.login.ZganLoginService;
+import zgan.ohos.utils.Frame;
+import zgan.ohos.utils.PreferenceUtil;
 import zgan.ohos.utils.generalhelper;
 
 public class MessageActivity extends myBaseActivity {
@@ -64,7 +67,7 @@ public class MessageActivity extends myBaseActivity {
 
         // 当Window的Attributes改变时系统会调用此函数,可以直接调用以应用上面对窗口参数的更改,也可以用setAttributes
         // dialog.onWindowAttributesChanged(lp);
-       // dialogWindow.setAttributes(lp);
+        // dialogWindow.setAttributes(lp);
 
         loadData();
     }
@@ -77,8 +80,7 @@ public class MessageActivity extends myBaseActivity {
 
     @Override
     public void ViewClick(View v) {
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.back:
                 finish();
                 break;
@@ -93,7 +95,7 @@ public class MessageActivity extends myBaseActivity {
         setContentView(R.layout.lo_activity_message);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        View back=findViewById(R.id.back);
+        View back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,24 +141,24 @@ public class MessageActivity extends myBaseActivity {
     }
 
     public void loadMoreData() {
-        try {
-            pageindex++;
-            msglst.addAll(messageDal.GetMessages(pagesize, pageindex, msgtype));
-            int count = msglst.size();
-            int oldcount = isopen.length;
-            boolean[] newisopen = new boolean[count];
-            //isopen=new boolean[count];
-            for (int i = 0; i < oldcount; i++) {
-                newisopen[i] = isopen[i];
-            }
-            for (int i = oldcount; i < count; i++) {
-                newisopen[i] = false;
-            }
-            isopen = newisopen;
-            adapter.notifyDataSetChanged();
-        } catch (Exception ex) {
-            generalhelper.ToastShow(this, ex.getMessage());
-        }
+//        try {
+//            pageindex++;
+//            msglst.addAll(messageDal.GetMessages(pagesize, pageindex, msgtype));
+//            int count = msglst.size();
+//            int oldcount = isopen.length;
+//            boolean[] newisopen = new boolean[count];
+//            //isopen=new boolean[count];
+//            for (int i = 0; i < oldcount; i++) {
+//                newisopen[i] = isopen[i];
+//            }
+//            for (int i = oldcount; i < count; i++) {
+//                newisopen[i] = false;
+//            }
+//            isopen = newisopen;
+//            adapter.notifyDataSetChanged();
+//        } catch (Exception ex) {
+//            generalhelper.ToastShow(this, ex.getMessage());
+//        }
     }
 
     public void loadData() {
@@ -167,7 +169,9 @@ public class MessageActivity extends myBaseActivity {
             public void run() {
                 try {
                     Looper.prepare();
-                    msglst = messageDal.GetMessages(pagesize, pageindex, msgtype);
+                    //小区ID\t帐号\t消息类型ID\t开始时间\t结束时间
+                    ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), 0, "20150101", "20160301"), handler);
+                    //msglst = messageDal.GetMessages(pagesize, pageindex, msgtype);
                     int count = msglst.size();
                     isopen = new boolean[count];
                     for (int i = 0; i < count; i++) {
@@ -199,20 +203,49 @@ public class MessageActivity extends myBaseActivity {
                     generalhelper.ToastShow(MessageActivity.this, msg.obj);
                     toCloseProgress();
                     break;
+                case 1:
+                    Frame f = (Frame) msg.obj;
+                    String result = f.strData;
+                    String[] results = f.strData.split("\t");
+                    if (f.subCmd == 26) {
+                        if (results.length == 2 && results[0].equals("0")) {
+                            try {
+                                msglst = messageDal.GetMessages(results[1]);
+                                int count = msglst.size();
+                                isopen = new boolean[count];
+                                for (int i = 0; i < count; i++) {
+                                    isopen[i] = false;
+                                }
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        bindData();
+                                        toCloseProgress();
+                                    }
+                                });
+                            } catch (Exception ex) {
+                                android.os.Message msg1 = new android.os.Message();
+                                msg1.what = 0;
+                                msg1.obj = ex.getMessage();
+                                handler.sendMessage(msg1);
+                            }
+                        }
+                    }
+                    break;
             }
         }
     };
 
     void bindData() {
-        date=new Date();
+        date = new Date();
         adapter = new myAdapter();
         rvmsg.setAdapter(adapter);
         rvmsg.setLayoutManager(mLayoutManager);
-        Animation animation=AnimationUtils.loadAnimation(this, R.anim.enter);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.enter);
 
         //得到一个LayoutAnimationController对象；
 
-        LayoutAnimationController lac=new LayoutAnimationController(animation);
+        LayoutAnimationController lac = new LayoutAnimationController(animation);
 
         //设置控件显示的顺序；
 
@@ -240,7 +273,7 @@ public class MessageActivity extends myBaseActivity {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             msg = msglst.get(position);
             holder.txt_msg_type.setText(msg.getMsgType().getMsgTypeName());
-            holder.txt_pub_time.setText( generalhelper.getStringFromDate(
+            holder.txt_pub_time.setText(generalhelper.getStringFromDate(
                     generalhelper.getDateFromString(
                             msg.getMsgPublishTime(), date), "yyyy-MM-dd HH:mm"));
             holder.txt_title.setText(msg.getMsgTitle());
@@ -250,9 +283,9 @@ public class MessageActivity extends myBaseActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
                     intent.putExtra("content", holder.txt_content.getText());
-                    intent.putExtra("type",holder.txt_msg_type.getText());
-                    intent.putExtra("tile",holder.txt_title.getText());
-                    intent.putExtra("time",holder.txt_pub_time.getText());
+                    intent.putExtra("type", holder.txt_msg_type.getText());
+                    intent.putExtra("tile", holder.txt_title.getText());
+                    intent.putExtra("time", holder.txt_pub_time.getText());
                     if (Build.VERSION.SDK_INT > 20)
                         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MessageActivity.this, holder.txt_content, "content").toBundle());
                     else

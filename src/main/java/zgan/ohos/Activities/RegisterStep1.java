@@ -29,8 +29,8 @@ import zgan.ohos.utils.resultCodes;
 
 public class RegisterStep1 extends myBaseActivity {
     Toolbar toolbar;
-    String []communityNames=new String []{"金易▪伯爵世家","测试小区"};
-    int[]communityIds=new int[]{1,4};
+    String []communityNames=new String []{"金易▪伯爵世家"};//,"测试小区"
+    int[]communityIds=new int[]{1};//,4
     ListView lst_community;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,11 +1,12 @@
 package zgan.ohos.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TextInputLayout;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import zgan.ohos.R;
@@ -19,6 +20,8 @@ public class BindDevice extends myBaseActivity {
     TextInputLayout til_input;
     EditText et_input;
     String SID;
+    Button btn_cancel;
+    boolean showcancel=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +31,20 @@ public class BindDevice extends myBaseActivity {
 
     @Override
     protected void initView() {
+        Intent intent=getIntent();
+        showcancel=intent.getBooleanExtra("showcancel",false);
         setContentView(R.layout.activity_bind_device);
         til_input = (TextInputLayout) findViewById(R.id.til_input);
         et_input = (EditText) findViewById(R.id.et_input);
+        btn_cancel=(Button)findViewById(R.id.btn_cancel);
+        btn_cancel.setVisibility(showcancel?View.VISIBLE:View.GONE);
+        View back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -46,9 +60,14 @@ public class BindDevice extends myBaseActivity {
                     til_input.setErrorEnabled(true);
                 } else {
                     til_input.setErrorEnabled(false);
-                    System.out.print(String.format("%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), SID));
-                    ZganLoginService.toGetServerData(23, 254, String.format("%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), SID), handler);
+                    //ZganLoginService.toGetServerData(23, 254, String.format("%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), SID), handler);
+                    ZganLoginService.toGetServerData(23, 254, String.format("%s\t%s", PreferenceUtil.getUserName(), SID), handler);
                 }
+                break;
+            case R.id.btn_cancel:
+                Intent intent = new Intent(BindDevice.this, MainActivity.class);
+                startActivityWithAnim(intent);
+                finish();
                 break;
         }
 
@@ -60,20 +79,30 @@ public class BindDevice extends myBaseActivity {
             super.handleMessage(msg);
             if (msg.what == 1) {
                 Frame f = (Frame) msg.obj;
+                String result = generalhelper.getSocketeStringResult(f.strData);
+                System.out.print(f.strData);
                 if (f.subCmd == 23) {
-                    String result = generalhelper.getSocketeStringResult(f.strData);
-                    System.out.print(f.strData);
                     if (result.equals("0")) {
                         generalhelper.ToastShow(BindDevice.this, "绑定室内机成功");
-                        PreferenceUtil.setCommunityId(SID);
+                        ZganLoginService.toGetServerData(24, 0, String.format("%s", PreferenceUtil.getUserName()), handler);
+                    } else {
+                        generalhelper.ToastShow(BindDevice.this, "绑定室内机失败");
+                    }
+                } else if (f.subCmd == 24) {
+                    String[] results = result.split(",");
+                    if (results.length == 2 && results[0].equals("0")) {
+                        PreferenceUtil.setCommunityId(results[1]);
                         postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                if (showcancel)
+                                {
+                                    Intent intent=new Intent(BindDevice.this,MainActivity.class);
+                                    startActivityWithAnim(intent);
+                                }
                                 finish();
                             }
-                        }, 1000);
-                    } else {
-                        generalhelper.ToastShow(BindDevice.this, "绑定室内机失败");
+                        }, 500);
                     }
                 }
             }
