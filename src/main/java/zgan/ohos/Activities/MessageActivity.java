@@ -170,7 +170,7 @@ public class MessageActivity extends myBaseActivity {
                 try {
                     Looper.prepare();
                     //小区ID\t帐号\t消息类型ID\t开始时间\t结束时间
-                    ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), 0, "20150101", "20160301"), handler);
+                    ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), 0, "2015-01-01", "2016-03-01"), handler);
                     //msglst = messageDal.GetMessages(pagesize, pageindex, msgtype);
                     int count = msglst.size();
                     isopen = new boolean[count];
