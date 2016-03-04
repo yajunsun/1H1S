@@ -99,7 +99,7 @@ public class ZganLoginService_Listen implements Runnable {
             } else if (ServerState == 0) {
 
                 if (isNet) {
-                    Log.i("ZganJTWSService_Listen", "重新连接");
+                    Log.i("suntest", "重新连接");
                     Log.v("suntest", "client 重新连接");
                     ServerState = 3;
                     zsc.Server_IP = ZganLoginService.toGetHostIP();

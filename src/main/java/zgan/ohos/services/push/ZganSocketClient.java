@@ -97,7 +97,7 @@ public class ZganSocketClient {
 //                client.close();
 //            }
             client = new Socket();
-            client.connect(new InetSocketAddress(Server_IP, ServerPort), 3000);
+            client.connect(new InetSocketAddress(Server_IP, ServerPort), 10000);
 
             isRun = true;
 
@@ -424,6 +424,7 @@ public class ZganSocketClient {
                         PingTime = null;
                         toSendMsg(f);
                         Log.v("suntest", "ping");
+                        Log.i("suntest", "ping");
                     }
                 }
             }

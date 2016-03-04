@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Created by yajunsun on 2015/11/24.
  */
-public class Event extends BaseObject implements Serializable{
+public class Event extends BaseModel implements Serializable{
     private String ePlace;
     private String eRules;
     private int Id;
@@ -19,7 +19,7 @@ public class Event extends BaseObject implements Serializable{
     private int restrict_Members;
     private float pre_Money;
 
-    private static final long serialVersionUID = getserialVersionUID("Event");
+    //private static final long serialVersionUID = getserialVersionUID("Event");
     public Event() {
     }
 
@@ -134,109 +134,8 @@ public class Event extends BaseObject implements Serializable{
         if (value != null)
             this.eRules = value.toString();
     }
-
     @Override
-    public String gettablename() {
-        return this.getClass().getCanonicalName();
-    }
-
-    @Override
-    public Event getnewinstance(SoapObject soapObject) {
-        return soapObject == null ? new Event() : new Event(soapObject);
-    }
-
-    @Override
-    public Object getProperty(int i) {
-        switch (i) {
-            case 0:
-                return Id;
-            case 1:
-                return bTime;
-            case 2:
-                return eTime;
-            case 3:
-                return ePlace;
-            case 4:
-                return restrict_Members;
-            case 5:
-                return pre_Money;
-            case 6:
-                return eRules;
-            default:
-                return null;
-        }
-    }
-
-    @Override
-    public int getPropertyCount() {
-        return 7;
-    }
-
-    @Override
-    public void setProperty(int i, Object o) {
-        if (o != null) {
-            switch (i) {
-                case 0:
-                    Id = Integer.valueOf(o.toString());
-                    break;
-                case 1:
-                    bTime = o.toString();
-                    break;
-                case 2:
-                    eTime = o.toString();
-                    break;
-                case 3:
-                    ePlace = o.toString();
-                    break;
-                case 4:
-                    restrict_Members = Integer.valueOf(o.toString());
-                    break;
-                case 5:
-                    pre_Money = Float.valueOf(o.toString());
-                    break;
-                case 6:
-                    eRules = o.toString();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void getPropertyInfo(int i, Hashtable hashtable, PropertyInfo propertyInfo) {
-        propertyInfo.namespace = super.NAMESPACE;
-        switch (i) {
-            case 0:
-                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-                propertyInfo.name = "Id";
-                break;
-            case 1:
-                propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "bTime";
-                break;
-            case 2:
-                propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "eTime";
-                break;
-            case 3:
-                propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "ePlace";
-                break;
-            case 4:
-                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-                propertyInfo.name = "restrict_Members";
-                break;
-            case 5:
-                propertyInfo.type = Float.class;
-                propertyInfo.name = "pre_Money";
-                break;
-            case 6:
-                propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "eRules";
-                break;
-            default:
-                break;
-        }
+    public <T> T getnewinstance() {
+        return null;
     }
 }

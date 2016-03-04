@@ -56,7 +56,7 @@ public class EventList extends myBaseActivity {
         showback = getIntent().getBooleanExtra("showback", false);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(showback);
-        loadData();
+        //loadData();
     }
 
     @Override

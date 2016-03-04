@@ -32,7 +32,7 @@ public class ZganFileService_Listen implements Runnable {
 		zsc=new ZganSocketClient(ServerIP,ServerPort,
 				ZganFileServiceTools.PushQueue_Send,ZganFileServiceTools.PushQueue_Receive);
 		zsc.toStartClient();
-		zsc.toStartPing(0, FrameTools.Frame_MainCmd_Ping);
+		zsc.toStartPing(0xF, FrameTools.Frame_MainCmd_Ping);
 		zsc.ThreadName="ZganFileService";
 		
 		while(true){
@@ -47,20 +47,20 @@ public class ZganFileService_Listen implements Runnable {
 			
 			if(ServerState==1){
 				
-				//判断是否登录成功
-				if(!ZganFileServiceTools.isLoginOK && ZganFileServiceTools.PushQueue_Receive.size()>0){
-					byte[] resultByte=null;
-					resultByte=ZganFileServiceTools.PushQueue_Receive.poll();
-					
-					Frame f=new Frame(resultByte);
-					
-					if(f.mainCmd==0x0f && f.subCmd==21 && f.strData!=null && f.strData.equals("0")){
-						
-						ZganFileServiceTools.isLoginOK=true;
-						
-						Log.i("ZganFileService_Listen", "登录文件服务器成功");
-					}
-				}
+				//				//判断是否登录成功
+				//				if(!ZganFileServiceTools.isLoginOK && ZganFileServiceTools.PushQueue_Receive.size()>0){
+				//					byte[] resultByte=null;
+				//					resultByte=ZganFileServiceTools.PushQueue_Receive.poll();
+				//
+				//					Frame f=new Frame(resultByte);
+				//
+				//					if(f.mainCmd==0x0f && f.subCmd==21 && f.strData!=null && f.strData.equals("0")){
+				//
+				//						ZganFileServiceTools.isLoginOK=true;
+				//
+				//						Log.i("ZganFileService_Listen", "登录文件服务器成功");
+				//					}
+				//				}
 				
 				if(!isNet){					
 					ServerState=2;
@@ -95,7 +95,8 @@ public class ZganFileService_Listen implements Runnable {
 				
 			}else if(ServerState==2){
 				//网络断开
-
+				Log.v("suntest","断开连接");
+				Log.i("suntest","断开连接");
 				ZganFileServiceTools.isConnect=false;
 				zsc.toConnectDisconnect();
 				ServerState=0;

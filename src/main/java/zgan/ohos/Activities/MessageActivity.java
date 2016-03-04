@@ -48,27 +48,14 @@ public class MessageActivity extends myBaseActivity {
     boolean isLoadingMore = false;
     final static String SHEQUGONGGAO = "社区公告";
     final static String YANGGUANGYUBEI = "阳光渝北";
+    String nowdate;
     Dialog detailDialog;
     Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        detailDialog = new Dialog(this);
-//        Window dialogWindow = detailDialog.getWindow();
-//        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-//        dialogWindow.setGravity(Gravity.LEFT | Gravity.TOP | Gravity.RIGHT | Gravity.BOTTOM);
-//        lp.x = 0; // 新位置X坐标
-//        lp.y = 0; // 新位置Y坐标
-//        Point p = AppUtils.getWindowSize(this);
-//        lp.width = p.x; // 宽度
-//        lp.height = p.y; // 高度
-//        lp.alpha = 1f; // 透明度
-
-        // 当Window的Attributes改变时系统会调用此函数,可以直接调用以应用上面对窗口参数的更改,也可以用setAttributes
-        // dialog.onWindowAttributesChanged(lp);
-        // dialogWindow.setAttributes(lp);
-
+        nowdate = generalhelper.getStringFromDate(new Date());
         loadData();
     }
 
@@ -141,57 +128,32 @@ public class MessageActivity extends myBaseActivity {
     }
 
     public void loadMoreData() {
-//        try {
-//            pageindex++;
-//            msglst.addAll(messageDal.GetMessages(pagesize, pageindex, msgtype));
-//            int count = msglst.size();
-//            int oldcount = isopen.length;
-//            boolean[] newisopen = new boolean[count];
-//            //isopen=new boolean[count];
-//            for (int i = 0; i < oldcount; i++) {
-//                newisopen[i] = isopen[i];
-//            }
-//            for (int i = oldcount; i < count; i++) {
-//                newisopen[i] = false;
-//            }
-//            isopen = newisopen;
-//            adapter.notifyDataSetChanged();
-//        } catch (Exception ex) {
-//            generalhelper.ToastShow(this, ex.getMessage());
-//        }
+        try {
+            toSetProgressText(getResources().getString(R.string.loading));
+            toShowProgress();
+            pageindex++;
+            ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), msgtype, "2015-01-01", nowdate), handler);
+            //msglst.addAll(messageDal.GetMessages(pagesize, pageindex, msgtype));
+            adapter.notifyDataSetChanged();
+        } catch (Exception ex) {
+            generalhelper.ToastShow(this, ex.getMessage());
+        }
     }
 
     public void loadData() {
         toSetProgressText(getResources().getString(R.string.loading));
         toShowProgress();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Looper.prepare();
-                    //小区ID\t帐号\t消息类型ID\t开始时间\t结束时间
-                    ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), 0, "2015-01-01", "2016-03-01"), handler);
-                    //msglst = messageDal.GetMessages(pagesize, pageindex, msgtype);
-                    int count = msglst.size();
-                    isopen = new boolean[count];
-                    for (int i = 0; i < count; i++) {
-                        isopen[i] = false;
-                    }
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            bindData();
-                            toCloseProgress();
-                        }
-                    });
-                } catch (Exception ex) {
-                    android.os.Message msg = new android.os.Message();
-                    msg.what = 0;
-                    msg.obj = ex.getMessage();
-                    handler.sendMessage(msg);
-                }
-            }
-        }).start();
+        //小区ID\t帐号\t消息类型ID\t开始时间\t结束时间
+        ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), msgtype, "2015-01-01", nowdate), handler);
+        //msglst = messageDal.GetMessages(pagesize, pageindex, msgtype);
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                bindData();
+//                toCloseProgress();
+//
+//            }
+//        });
     }
 
     Handler handler = new Handler() {
@@ -205,17 +167,12 @@ public class MessageActivity extends myBaseActivity {
                     break;
                 case 1:
                     Frame f = (Frame) msg.obj;
-                    String result = f.strData;
+                    //String result = f.strData;
                     String[] results = f.strData.split("\t");
                     if (f.subCmd == 26) {
                         if (results.length == 2 && results[0].equals("0")) {
                             try {
                                 msglst = messageDal.GetMessages(results[1]);
-                                int count = msglst.size();
-                                isopen = new boolean[count];
-                                for (int i = 0; i < count; i++) {
-                                    isopen[i] = false;
-                                }
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -272,83 +229,30 @@ public class MessageActivity extends myBaseActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             msg = msglst.get(position);
-            holder.txt_msg_type.setText(msg.getMsgType().getMsgTypeName());
+            holder.txt_msg_type.setText(msg.getMsgType());
             holder.txt_pub_time.setText(generalhelper.getStringFromDate(
                     generalhelper.getDateFromString(
                             msg.getMsgPublishTime(), date), "yyyy-MM-dd HH:mm"));
             holder.txt_title.setText(msg.getMsgTitle());
             holder.txt_content.setText(msg.getMsgContent());
+            holder.msg_id = msg.getMsgId();
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
-                    intent.putExtra("content", holder.txt_content.getText());
-                    intent.putExtra("type", holder.txt_msg_type.getText());
-                    intent.putExtra("tile", holder.txt_title.getText());
-                    intent.putExtra("time", holder.txt_pub_time.getText());
+//                    intent.putExtra("content", holder.txt_content.getText());
+//                    intent.putExtra("type", holder.txt_msg_type.getText());
+//                    intent.putExtra("tile", holder.txt_title.getText());
+//                    intent.putExtra("time", holder.txt_pub_time.getText());
+                    intent.putExtra("msg_id", holder.msg_id);
                     if (Build.VERSION.SDK_INT > 20)
-                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MessageActivity.this, holder.txt_content, "content").toBundle());
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MessageActivity.this,holder.itemView, "content").toBundle());
                     else
                         startActivity(intent);
-//                    try {
-//                        if (isopen[position] == false) {
-//                            holder.minHeight_content = holder.txt_content.getHeight();
-//                            holder.minHeight_title = holder.txt_title.getHeight();
-//                            holder.txt_content.setHeight(holder.minHeight_content);
-//                            holder.txt_title.setHeight(holder.minHeight_title);
-//
-//                            holder.txt_content.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    int maxHeight_content = getMaxWrapHeight(holder.txt_content);
-//                                    int maxHeight_title = getMaxWrapHeight(holder.txt_title);
-//                                    AnimatorSet as = new AnimatorSet();
-//                                    ObjectAnimator oa1 = ObjectAnimator.ofInt(holder.txt_content, "Height", maxHeight_content);
-//                                    ObjectAnimator oa2 = ObjectAnimator.ofInt(holder.txt_title, "Height", maxHeight_title);
-//                                    as.setInterpolator(new DecelerateInterpolator());
-//                                    as.play(oa1).with(oa2);
-//                                    as.setDuration(500).start();
-//                                }
-//                            });
-//                            detailDialog.setTitle(holder.txt_title.getText());
-//                            TextView tv=new TextView(MessageActivity.this);
-//                            //tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-//                            Point p=AppUtils.getWindowSize(MessageActivity.this);
-//                            tv.setLayoutParams(new ViewGroup.LayoutParams(p.x,p.y));
-//                            tv.setText(holder.txt_content.getText());
-//                            tv.setTextSize(20);
-//                            detailDialog.setContentView(tv);
-//                            detailDialog.show();
-//                            isopen[position] = true;
-//                        } else {
-//                            holder.txt_content.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    AnimatorSet as = new AnimatorSet();
-//                                    ObjectAnimator oa1 = ObjectAnimator.ofInt(holder.txt_content, "Height", holder.minHeight_content);
-//                                    ObjectAnimator oa2 = ObjectAnimator.ofInt(holder.txt_title, "Height", holder.minHeight_title);
-//                                    as.setInterpolator(new DecelerateInterpolator());
-//                                    as.play(oa1).with(oa2);
-//                                    as.setDuration(500).start();
-//                                }
-//                            });
-//                            detailDialog.dismiss();
-//                            isopen[position] = false;
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
                 }
             });
         }
 
-
-        private int getMaxWrapHeight(TextView pTextView) {
-            Layout layout = pTextView.getLayout();
-            int desired = layout.getLineTop(pTextView.getLineCount());
-            int padding = pTextView.getCompoundPaddingTop() + pTextView.getCompoundPaddingBottom();
-            return desired + padding;
-        }
 
         @Override
         public int getItemCount() {
@@ -357,8 +261,7 @@ public class MessageActivity extends myBaseActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             TextView txt_msg_type, txt_pub_time, txt_title, txt_content;
-            //boolean isopen = false;
-            int minHeight_content, minHeight_title;
+            int msg_id;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -366,6 +269,7 @@ public class MessageActivity extends myBaseActivity {
                 txt_pub_time = (TextView) itemView.findViewById(R.id.txt_pub_time);
                 txt_title = (TextView) itemView.findViewById(R.id.txt_title);
                 txt_content = (TextView) itemView.findViewById(R.id.txt_content);
+                msg_id = 0;
             }
         }
     }

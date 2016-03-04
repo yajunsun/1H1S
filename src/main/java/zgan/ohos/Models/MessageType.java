@@ -9,9 +9,9 @@ import java.util.Objects;
 /**
  * Created by yajunsun on 2015/12/28.
  */
-public class MessageType extends BaseObject {
+public class MessageType extends BaseModel {
 
-    private static final long serialVersionUID = getserialVersionUID("MessageType");
+   // private static final long serialVersionUID = getserialVersionUID("MessageType");
 
     public MessageType() {
     }
@@ -57,78 +57,11 @@ public class MessageType extends BaseObject {
     private int MsgTypeId;
 
     private String MsgTypeName;
-    //    {
-//        get { return _msgTypeName; }
-//        set
-//        {
-//            if (value != null && value.Length > 50)
-//                throw new ArgumentOutOfRangeException("Invalid value for MsgTypeName", value, value.ToString());
-//            _msgTypeName = value;
-//        }
-//    }
+
     private int MsgTypePId;
 
-
     @Override
-    public String gettablename() {
-        return this.getClass().getCanonicalName();
-    }
-
-    @Override
-    public MessageType getnewinstance(SoapObject soapObject) {
-        return soapObject == null ? new MessageType() : new MessageType(soapObject);
-    }
-
-    @Override
-    public Object getProperty(int i) {
-        switch (i) {
-            case 0:
-                return MsgTypeId;
-            case 1:
-                return MsgTypeName;
-            case 2:
-                return MsgTypePId;
-            default:
-                return null;
-        }
-    }
-
-    @Override
-    public int getPropertyCount() {
-        return 3;
-    }
-
-    @Override
-    public void setProperty(int i, Object o) {
-        switch (i) {
-            case 0:
-                setMsgTypeId(o);
-                break;
-            case 1:
-                setMsgTypeName(o);
-                break;
-            case 2:
-                setMsgTypePId(o);
-                break;
-        }
-    }
-
-    @Override
-    public void getPropertyInfo(int i, Hashtable hashtable, PropertyInfo propertyInfo) {
-        propertyInfo.namespace = super.NAMESPACE;
-        switch (i) {
-            case 0:
-                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-                propertyInfo.name = "MsgTypeId";
-                break;
-            case 1:
-                propertyInfo.type = PropertyInfo.STRING_CLASS;
-                propertyInfo.name = "MsgTypeName";
-                break;
-            case 2:
-                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
-                propertyInfo.name = "MsgTypePId";
-                break;
-        }
+    public <T> T getnewinstance() {
+        return null;
     }
 }

@@ -5,28 +5,22 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import zgan.ohos.Models.BaseModel;
 
 /**
- * Created by sunyajun on 16-3-3.
- * 用于获取实体列表
+ * Created by Administrator on 16-3-4.
  */
-public class XmlParser<T extends BaseModel> extends DefaultHandler {
-    //单个实例
-    T model;
-    //xml解析后的实例集合
-    public List<T> list;
-    //类的临时实例
-    T modelInstance;
+public class XmlParser_model<T extends BaseModel> extends DefaultHandler {
+
+    //Model类的实例
+    public T modelInstance;
     //类中的方法集合
     Method[] methods;
     //此时解析类中存在的方法
     Method method;
 
-    public XmlParser(T _instance) {
+    public XmlParser_model(T _instance) {
         modelInstance = _instance;
         methods = modelInstance.getClass().getDeclaredMethods();
     }
@@ -34,7 +28,6 @@ public class XmlParser<T extends BaseModel> extends DefaultHandler {
     @Override
     public void startDocument() throws SAXException {
         // TODO Auto-generated method stub
-        list = new ArrayList<>();
     }
 
     @Override
@@ -47,9 +40,6 @@ public class XmlParser<T extends BaseModel> extends DefaultHandler {
     public void startElement(String uri, String localName, String qName,
                              Attributes attributes) throws SAXException {
         // TODO Auto-generated method stub
-        if (localName.equals("object")) {
-            model = modelInstance.getnewinstance();
-        }
         if (!(localName.equals("root") || localName.equals("object")))
             try {
                 String tempMethod = "set" + localName;
@@ -66,12 +56,6 @@ public class XmlParser<T extends BaseModel> extends DefaultHandler {
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
         // TODO Auto-generated method stub
-//        if (localName.equals("item")) {
-//            RssFeed.addItem(RssItem);
-        // return;
-        // }
-        if (localName.equals("object"))
-            list.add(model);
     }
 
     @Override
@@ -80,10 +64,9 @@ public class XmlParser<T extends BaseModel> extends DefaultHandler {
         // TODO Auto-generated method stub
         String theString = new String(ch, start, length);
         try {
-             method.invoke(model, theString);
+            method.invoke(modelInstance, theString);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
-
