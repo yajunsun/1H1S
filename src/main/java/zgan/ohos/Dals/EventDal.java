@@ -11,37 +11,33 @@ import zgan.ohos.Models.Event;
  */
 public class EventDal extends baseDal<Event> {
     public List<Event> getCurrentEvents(String datestr) throws Exception {
-//        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getCurrentEvents";
-//        String MethodName = "getCurrentEvents";
-//        SoapObject request = new SoapObject(NameSpace, MethodName);
-//        request.addProperty("datestr", datestr);
-//        return getnetobjectlist(new Event(), request, URL, SOAP_ACTION);
-        return null;
+        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getCurrentEvents";
+        String MethodName = "getCurrentEvents";
+        SoapObject request = new SoapObject(NameSpace, MethodName);
+        request.addProperty("datestr", datestr);
+        return getnetobjectlist(new Event(), request, URL, SOAP_ACTION);
     }
 
     public List<Event> getPreViewEvents(String datestr) throws Exception {
-//        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getPreViewEvents";
-//        String MethodName = "getPreViewEvents";
-//        SoapObject request = new SoapObject(NameSpace, MethodName);
-//        request.addProperty("datestr", datestr);
-//        return getnetobjectlist(new Event(), request, URL, SOAP_ACTION);
-        return null;
+        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getPreViewEvents";
+        String MethodName = "getPreViewEvents";
+        SoapObject request = new SoapObject(NameSpace, MethodName);
+        request.addProperty("datestr", datestr);
+        return getnetobjectlist(new Event(), request, URL, SOAP_ACTION);
     }
 
     public List<Event> getEvent(int Id) throws Exception {
-//        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getEvent";
-//        String MethodName = "getEvent";
-//        SoapObject request = new SoapObject(NameSpace, MethodName);
-//        request.addProperty("Id", Id);
-//        return getnetobjectlist(new Event(), request, URL, SOAP_ACTION);
-        return null;
+        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getEvent";
+        String MethodName = "getEvent";
+        SoapObject request = new SoapObject(NameSpace, MethodName);
+        request.addProperty("Id", Id);
+        return getnetobjectlist(new Event(), request, URL, SOAP_ACTION);
     }
 
     public Event getFrontEvent() throws Exception {
-//        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getFrontEvent";
-//        String MethodName = "getFrontEvent";
-//        SoapObject request = new SoapObject(NameSpace, MethodName);
-//        return getnetobject(new Event(), request, URL, SOAP_ACTION);
-        return null;
+        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getFrontEvent";
+        String MethodName = "getFrontEvent";
+        SoapObject request = new SoapObject(NameSpace, MethodName);
+        return getnetobject(new Event(), request, URL, SOAP_ACTION);
     }
 }

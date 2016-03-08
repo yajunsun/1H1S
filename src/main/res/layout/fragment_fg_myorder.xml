@@ -41,7 +41,6 @@
             android:layout_weight="1"
             android:background="@color/myorder_toolbbar_color"
             android:gravity="center"
-            android:onClick="viewClick"
             android:text="@string/txt_order_all"
             android:textSize="@dimen/toolbar_option_size" />
 
@@ -53,7 +52,7 @@
             android:layout_weight="1"
             android:background="@color/myorder_toolbbar_color"
             android:gravity="center"
-            android:onClick="viewClick"
+
             android:text="@string/txt_order_not_pay"
             android:textSize="@dimen/toolbar_option_size" />
 
@@ -65,7 +64,7 @@
             android:layout_weight="1"
             android:background="@color/myorder_toolbbar_color"
             android:gravity="center"
-            android:onClick="viewClick"
+
             android:text="@string/txt_order_onway"
             android:textSize="@dimen/toolbar_option_size" />
 
@@ -77,7 +76,7 @@
             android:layout_weight="1"
             android:background="@color/myorder_toolbbar_color"
             android:gravity="center"
-            android:onClick="viewClick"
+
             android:text="@string/txt_order_done"
             android:textSize="@dimen/toolbar_option_size" />
     </LinearLayout>

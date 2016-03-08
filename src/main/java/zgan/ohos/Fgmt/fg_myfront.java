@@ -42,11 +42,13 @@ import zgan.ohos.Activities.DailyBreakfirst;
 import zgan.ohos.Activities.EventList;
 import zgan.ohos.Activities.HouseHoldingChat;
 import zgan.ohos.Activities.HouseHolderService;
+import zgan.ohos.Activities.LeaveMessages;
 import zgan.ohos.Activities.Login;
 import zgan.ohos.Activities.MessageActivity;
 import zgan.ohos.Activities.ProLaundry;
 import zgan.ohos.Activities.ServeTrace;
 import zgan.ohos.Contracts.IImageloader;
+import zgan.ohos.Models.LeaveMessage;
 import zgan.ohos.R;
 import zgan.ohos.services.login.ZganLoginService;
 import zgan.ohos.utils.AppUtils;
@@ -208,7 +210,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
         msg_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), HouseHoldingChat.class);
+                Intent intent = new Intent(getActivity(), LeaveMessages.class);
                 startActivityWithAnim(getActivity(), intent);
                 houseHoldingDialog.dismiss();
             }

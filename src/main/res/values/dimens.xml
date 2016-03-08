@@ -19,7 +19,7 @@
     <dimen name="navigation_icon_size">30dp</dimen>
     <dimen name="navigation_txt_size">15sp</dimen>
     <!-- 個人中心-->
-    <dimen name="myaccount_txt_size">25sp</dimen>
+    <dimen name="myaccount_txt_size">20sp</dimen>
     <!--我的订单-->
     <dimen name="myorder_statusbar_height">60dp</dimen>
     <!-- 個人中心頭像背景區域高度-->

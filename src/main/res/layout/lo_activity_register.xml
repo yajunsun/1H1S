@@ -69,7 +69,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:text="我的电话"
+                android:text="手机号码"
                 android:textColor="@color/shishiwuye_big_txt_color"
                 android:textSize="@dimen/shishiwuye_big_txt_size" />
 
@@ -108,7 +108,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:text="登录密码"
+                android:text="输入密码"
                 android:textColor="@color/shishiwuye_big_txt_color"
                 android:textSize="@dimen/shishiwuye_big_txt_size" />
 
@@ -147,7 +147,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:text="重复密码"
+                android:text="确认密码"
                 android:textColor="@color/shishiwuye_big_txt_color"
                 android:textSize="@dimen/shishiwuye_big_txt_size" />
 
@@ -184,8 +184,8 @@
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:layout_below="@id/rb_access"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/login_done"
         android:onClick="ViewClick"

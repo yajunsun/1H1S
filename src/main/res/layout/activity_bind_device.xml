@@ -53,32 +53,45 @@
         android:layout_below="@id/toolbar"
         android:layout_marginTop="20dp">
 
-        <TextView
-            android:id="@+id/txt1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:text="我的电话"
-            android:textColor="@color/shishiwuye_big_txt_color"
-            android:textSize="@dimen/shishiwuye_big_txt_size" />
+        <!--<TextView-->
+        <!--android:id="@+id/txt1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:text="请输入设备号"-->
+        <!--android:textColor="@color/shishiwuye_big_txt_color"-->
+        <!--android:textSize="@dimen/shishiwuye_big_txt_size" />-->
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_input"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@id/txt1">
+            android:layout_marginLeft="20dp">
 
             <EditText
                 android:id="@+id/et_input"
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:gravity="top"
-                android:hint="请输入室内机的SID" />
+                android:hint="请输入设备号" />
         </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/til_input"
+            android:background="@color/icon_base_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_input"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:text="设备号获取：室内机>设置>设备信息>设备号" />
     </RelativeLayout>
 
     <Button
@@ -86,8 +99,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         android:layout_below="@id/ll_input"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/login_done"
         android:onClick="ViewClick"
@@ -100,8 +113,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         android:layout_below="@id/btn_bind"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/login_done"
         android:onClick="ViewClick"

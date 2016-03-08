@@ -52,16 +52,24 @@ public class ZganLoginService_Listen implements Runnable {
         _context = context;
     }
 
-    @Override
-    public void run() {
-        // TODO Auto-generated method stub
-        Log.v("suntest", "Listen");
+    public void newSocketClient() {
+
+        if (zsc != null) {
+            zsc.toCloseClient();
+        }
         zsc = new ZganSocketClient(ZganLoginService.LoginService_IP, ZganLoginService.ZGAN_LOGIN_PORT,
                 ZganLoginServiceTools.PushQueue_Send, ZganLoginServiceTools.PushQueue_Receive);
         //zsc.ZganReceiveTime = 500;
         zsc.toStartClient();
         zsc.toStartPing(1, FrameTools.Frame_MainCmd_Ping);
         zsc.ThreadName = "ZganLoginService";
+    }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+        Log.v("suntest", "Listen");
+        newSocketClient();
         boolean isNet = ZganLoginService.isNetworkAvailable(_context);
         iniNetState = isNet;
         while (true) {
@@ -114,6 +122,7 @@ public class ZganLoginService_Listen implements Runnable {
                         Log.v("suntest", zsc.client.isClosed() ? "socket关闭状态" : "socket打开状态");
                         if (zsc.client != null && !zsc.client.isClosed())
                             zsc.toConnectDisconnect();
+                        //newSocketClient();
                         ServerState = 0;
                         Log.v("suntest", "6ServerState=" + ServerState);
                     }

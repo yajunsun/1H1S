@@ -53,4 +53,6 @@
     <color name="shishiwuye_big_txt_color">#242424</color>
     <color name= "shishiwuye_sm_txt_color">#5b5858</color>
     <color name="base_func_color">#FFFFFFFF</color>
+    <!--留言回复页的背景-->
+    <color name="bkg_color_msg_reply">#ece9e7</color>
 </resources>

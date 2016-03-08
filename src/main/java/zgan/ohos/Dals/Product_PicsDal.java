@@ -12,6 +12,10 @@ import zgan.ohos.Models.Product_Pics;
  */
 public class Product_PicsDal extends baseDal<Product_Pics> {
     public List<Product_Pics> getProductPics(int ProductId) throws Exception {
-       return null;
+        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getProductPics";
+        String MethodName = "getProductPics";
+        SoapObject request = new SoapObject(NameSpace, MethodName);
+        request.addProperty("ProductId", ProductId);
+        return getnetobjectlist(new Product_Pics(), request, URL, SOAP_ACTION);
     }
 }

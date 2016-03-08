@@ -50,7 +50,7 @@
     <!--个人中心-->
     <dimen name="myaccount_txt_account_margin_top">5dp</dimen>
     <dimen name="myaccount_item_height">60dp</dimen>
-    <dimen name="myaccount_tiem_padding_left">5dp</dimen>
+    <dimen name="myaccount_tiem_padding_left">20dp</dimen>
     <dimen name="item_margin_top">-10dp</dimen>
 
     <dimen name="tsgn_ll_height">65dp</dimen>

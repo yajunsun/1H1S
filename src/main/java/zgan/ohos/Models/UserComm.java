@@ -8,7 +8,7 @@ import java.util.Hashtable;
 /**
  * Created by yajunsun on 2015/12/10.
  */
-public class UserComm extends BaseModel {
+public class UserComm extends BaseObject {
 
     private int Comm_Id;
     private String Comm_Name;
@@ -65,7 +65,80 @@ public class UserComm extends BaseModel {
     }
 
     @Override
-    public <T> T getnewinstance() {
-        return null;
+    public String gettablename() {
+        return this.getClass().getCanonicalName();
+    }
+
+    @Override
+    public UserComm getnewinstance(SoapObject soapObject) {
+        return soapObject == null ? new UserComm() : new UserComm(soapObject);
+    }
+
+    @Override
+    public Object getProperty(int i) {
+        switch (i) {
+            case 0:
+                return Comm_Id;
+            case 1:
+                return Comm_Name;
+            case 2:
+                return FComm_Id;
+            case 3:
+                return HasChild;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public int getPropertyCount() {
+        return 4;
+    }
+
+    @Override
+    public void setProperty(int i, Object o) {
+        if (o != null) {
+            switch (i) {
+                case 0:
+                    Comm_Id = Integer.valueOf(o.toString());
+                    break;
+                case 1:
+                    Comm_Name = o.toString();
+                    break;
+                case 2:
+                    FComm_Id = Integer.valueOf(o.toString());
+                    break;
+                case 3:
+                    HasChild = Integer.valueOf(o.toString());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void getPropertyInfo(int i, Hashtable hashtable, PropertyInfo propertyInfo) {
+        propertyInfo.namespace = super.NAMESPACE;
+        switch (i) {
+            case 0:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "Comm_Id";
+                break;
+            case 1:
+                propertyInfo.type = PropertyInfo.STRING_CLASS;
+                propertyInfo.name = "Comm_Name";
+                break;
+            case 2:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "FComm_Id";
+                break;
+            case 3:
+                propertyInfo.type = PropertyInfo.INTEGER_CLASS;
+                propertyInfo.name = "HasChild";
+                break;
+            default:
+                break;
+        }
     }
 }

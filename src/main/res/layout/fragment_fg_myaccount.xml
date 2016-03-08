@@ -41,14 +41,14 @@
             android:layout_width="@dimen/out_lo_header_size"
             android:layout_height="@dimen/out_lo_header_size"
             android:layout_centerInParent="true"
-            android:gravity="center"
-            android:background="@drawable/linear_circle_stroke_bgd">
+            android:background="@drawable/linear_circle_stroke_bgd"
+            android:gravity="center">
 
             <zgan.ohos.ConstomControls.RoundImageViewByXfermode
                 android:id="@+id/iv_header"
-                android:scaleType="center"
                 android:layout_width="@dimen/header_size"
-                android:layout_height="@dimen/header_size" />
+                android:layout_height="@dimen/header_size"
+                android:scaleType="center" />
         </LinearLayout>
 
         <TextView
@@ -69,7 +69,7 @@
         android:layout_below="@id/ll_header"
         android:background="@drawable/draw_normalitem_bg"
         android:focusable="true"
-        android:padding="@dimen/myaccount_tiem_padding_left">
+        android:paddingLeft="@dimen/myaccount_tiem_padding_left">
 
 
         <TextView
@@ -77,16 +77,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textColor="@color/shishiwuye_big_txt_color"
             android:text="修改头像"
             android:textSize="@dimen/myaccount_txt_size" />
 
-            <ImageView
-                android:id="@+id/iv_updateheader"
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_updateheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
 
     </RelativeLayout>
 
@@ -100,24 +99,23 @@
         android:background="@drawable/draw_normalitem_bg"
         android:clickable="true"
         android:focusable="true"
-        android:padding="5dp">
+        android:paddingLeft="@dimen/myaccount_tiem_padding_left">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textColor="@color/shishiwuye_big_txt_color"
             android:text="修改密码"
             android:textSize="@dimen/myaccount_txt_size" />
 
 
-            <ImageView
-                android:id="@+id/iv_updatepwd"
-                android:layout_width="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_updatepwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
 
     </RelativeLayout>
 
@@ -131,7 +129,7 @@
         android:background="@drawable/draw_normalitem_bg"
         android:clickable="true"
         android:focusable="true"
-        android:padding="5dp">
+        android:paddingLeft="@dimen/myaccount_tiem_padding_left">
 
 
         <TextView
@@ -139,17 +137,15 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="登出/重新登录"
-            android:textColor="@color/shishiwuye_big_txt_color"
             android:textSize="@dimen/myaccount_txt_size" />
 
 
-
-            <ImageView
-                android:id="@+id/iv_logout"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
 
 
     </RelativeLayout>
@@ -164,7 +160,7 @@
         android:background="@drawable/draw_normalitem_bg"
         android:clickable="true"
         android:focusable="true"
-        android:padding="5dp">
+        android:paddingLeft="@dimen/myaccount_tiem_padding_left">
 
 
         <TextView
@@ -172,17 +168,15 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="绑定室内机"
-            android:textColor="@color/shishiwuye_big_txt_color"
             android:textSize="@dimen/myaccount_txt_size" />
-
 
 
         <ImageView
             android:id="@+id/iv_binddevice"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
 
 
     </RelativeLayout>

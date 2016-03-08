@@ -43,7 +43,7 @@ public class EventList extends myBaseActivity {
     public final static int PRE = 1;
     public final static int CURRENT = 2;
     private int dataModel = CURRENT;
-    private static int showType = listType;//当前表现方式
+    private int showType = gridType;//当前表现方式
     event_ListAdapter adapter;
     List<Event_Product> list;
     Event_ProductDal event_productDal;
@@ -56,7 +56,7 @@ public class EventList extends myBaseActivity {
         showback = getIntent().getBooleanExtra("showback", false);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(showback);
-        //loadData();
+        loadData();
     }
 
     @Override

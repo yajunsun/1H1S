@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="right"
     android:orientation="horizontal"
+
     android:paddingRight="10dp"
     android:paddingTop="10dp" >
 
@@ -14,40 +15,50 @@
 
         <TextView
             android:id="@+id/txtlogtime"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:paddingBottom="2dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:paddingTop="2dp"
-            android:textColor="#000000"
             android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/txtname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+        <!--<TextView-->
+            <!--android:id="@+id/txtname"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_below="@id/txtlogtime"-->
+            <!--android:text="fdsa" />-->
+        <ImageView
+            android:id="@+id/ivname"
+            android:layout_marginTop="10dp"
+            android:layout_width="30dp"
             android:layout_below="@id/txtlogtime"
-            android:text="fdsa" />
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/wuguanheader"
+            android:layout_height="30dp" />
 
         <TextView
+            android:layout_below="@id/txtlogtime"
             android:id="@+id/txtcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/txtname"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/txtname"
+            android:layout_toLeftOf="@id/ivname"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp"
             android:background="@drawable/chatto_bg"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="left|center"
+            android:gravity="left|top"
             android:lineSpacingExtra="2dp"
-            android:minHeight="50dp"
             android:text="adf"
-            android:textColor="#ff000000"
             android:textSize="15sp" />
     </RelativeLayout>
 

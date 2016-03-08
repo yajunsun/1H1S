@@ -108,7 +108,11 @@
         <activity
             android:name=".Activities.ServeTrace"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.BindDevice"></activity>
+        <activity android:name=".Activities.BindDevice" />
+        <activity android:name=".Activities.LeaveMessages" />
+        <activity
+            android:name=".Activities.ReplyMessages"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
     </application>
 
 </manifest>

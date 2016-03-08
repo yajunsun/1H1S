@@ -1,6 +1,5 @@
 package zgan.ohos.Activities;
 
-import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,19 +8,15 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Fade;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import zgan.ohos.MyApplication;
 import zgan.ohos.R;
 import zgan.ohos.services.login.ZganLoginService;
-import zgan.ohos.utils.generalhelper;
 
 /**
  * Created by yajunsun on 2016/1/11.

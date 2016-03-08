@@ -26,6 +26,12 @@ public class XmlParser<T extends BaseModel> extends DefaultHandler {
     //此时解析类中存在的方法
     Method method;
 
+    String ParentTag = "li";
+    public XmlParser(T _instance, String _parentTag) {
+        this(_instance);
+        ParentTag = _parentTag;
+    }
+
     public XmlParser(T _instance) {
         modelInstance = _instance;
         methods = modelInstance.getClass().getDeclaredMethods();
@@ -47,10 +53,10 @@ public class XmlParser<T extends BaseModel> extends DefaultHandler {
     public void startElement(String uri, String localName, String qName,
                              Attributes attributes) throws SAXException {
         // TODO Auto-generated method stub
-        if (localName.equals("object")) {
+        if (localName.equals(ParentTag)) {
             model = modelInstance.getnewinstance();
         }
-        if (!(localName.equals("root") || localName.equals("object")))
+        if (!(localName.equals("root") || localName.equals(ParentTag)))
             try {
                 String tempMethod = "set" + localName;
                 for (Method m : methods) {
@@ -70,7 +76,7 @@ public class XmlParser<T extends BaseModel> extends DefaultHandler {
 //            RssFeed.addItem(RssItem);
         // return;
         // }
-        if (localName.equals("object"))
+        if (localName.equals(ParentTag))
             list.add(model);
     }
 
@@ -80,7 +86,7 @@ public class XmlParser<T extends BaseModel> extends DefaultHandler {
         // TODO Auto-generated method stub
         String theString = new String(ch, start, length);
         try {
-             method.invoke(model, theString);
+            method.invoke(model, theString);
         } catch (Exception e) {
             e.printStackTrace();
         }

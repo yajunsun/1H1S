@@ -100,12 +100,24 @@ public class Login extends myBaseActivity {
             if (msg.what == 1) {
                 Frame frame = (Frame) msg.obj;
                 String result = generalhelper.getSocketeStringResult(frame.strData);
-                if (frame.subCmd == 1 && result.equals("0")) {
-                    logined();
-                    ZganLoginService.toGetServerData(24, 0, PreferenceUtil.getUserName(), handler);
-                } else if (frame.subCmd == 1 && (result.equals("6") || result.equals("8"))) {
-                    generalhelper.ToastShow(Login.this, "用户不存在");
-                } else if (frame.subCmd == 24) {
+                if (frame.subCmd == 1) {
+                    if (result.equals("0")) {
+                        logined();
+                        ZganLoginService.toGetServerData(24, 0, PreferenceUtil.getUserName(), handler);
+                        til_Phone.setErrorEnabled(false);
+                        til_pwd.setErrorEnabled(false);
+                    }
+                    else if (result.equals("6") || result.equals("8"))
+                    {
+                        til_Phone.setError("不存在此用户，请先注册");
+                        til_Phone.setErrorEnabled(true);
+                    }
+                    else if (result.equals("1"))
+                    {
+                        til_pwd.setError("密码错误");
+                        til_pwd.setErrorEnabled(true);
+                    }
+                }  else if (frame.subCmd == 24) {
                     String communityId = PreferenceUtil.getCommunityId();
                     String results[] = result.split(",");
                     if (results.length == 2 && results[0].equals("0")) {

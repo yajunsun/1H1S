@@ -1,87 +1,62 @@
 package zgan.ohos.Activities;
 
-import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Date;
 import java.util.List;
 
-import zgan.ohos.Dals.MessageDal;
-import zgan.ohos.Models.Message;
+import zgan.ohos.Dals.LeaveMessageDal;
+import zgan.ohos.Models.LeaveMessage;
 import zgan.ohos.R;
 import zgan.ohos.services.login.ZganLoginService;
 import zgan.ohos.utils.Frame;
 import zgan.ohos.utils.PreferenceUtil;
 import zgan.ohos.utils.generalhelper;
 
-public class MessageActivity extends myBaseActivity {
+public class LeaveMessages extends myBaseActivity {
+
     Toolbar toolbar;
     TextView txt_title;
     RecyclerView rvmsg;
     SwipeRefreshLayout refreshview;
-    List<Message> msglst;
-    MessageDal messageDal;
+    List<LeaveMessage> msglst;
+    LeaveMessageDal leavemsgDal;
     int pageindex = 0;
-    int pagesize = 20;
-    int msgtype = 0;
     myAdapter adapter;
-    boolean[] isopen;
     LinearLayoutManager mLayoutManager;
     boolean isLoadingMore = false;
-    final static String SHEQUGONGGAO = "社区公告";
-    final static String YANGGUANGYUBEI = "阳光渝北";
-    String nowdate;
-    Dialog detailDialog;
+    Dialog addDialog;
     Date date;
+    EditText et_input;
+    Button btn_commit;
+    Button btn_cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        nowdate = generalhelper.getStringFromDate(new Date());
         toSetProgressText(getResources().getString(R.string.loading));
         toShowProgress();
         loadData();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacks(null);
-    }
-
-    @Override
-    public void ViewClick(View v) {
-        switch (v.getId()) {
-            case R.id.back:
-                finish();
-                break;
-        }
-    }
-
-    @Override
     protected void initView() {
-        msgtype = getIntent().getIntExtra("msgtype", 0);
-        messageDal = new MessageDal();
+        setContentView(R.layout.activity_leave_messages);
+        leavemsgDal = new LeaveMessageDal();
         mLayoutManager = new LinearLayoutManager(this);
-        setContentView(R.layout.lo_activity_message);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         View back = findViewById(R.id.back);
@@ -92,15 +67,6 @@ public class MessageActivity extends myBaseActivity {
             }
         });
         txt_title = (TextView) findViewById(R.id.txt_title);
-        switch (msgtype) {
-            case 1:
-                txt_title.setText(SHEQUGONGGAO);
-                break;
-            case 3:
-                txt_title.setText(YANGGUANGYUBEI);
-                break;
-        }
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         rvmsg = (RecyclerView) findViewById(R.id.rv_msg);
         refreshview = (SwipeRefreshLayout) findViewById(R.id.refreshview);
         refreshview.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -110,7 +76,7 @@ public class MessageActivity extends myBaseActivity {
                 isLoadingMore=false;
                 loadData();
                 //adapter.notifyDataSetChanged();
-
+                //refreshview.setRefreshing(false);
             }
         });
         rvmsg.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -124,8 +90,42 @@ public class MessageActivity extends myBaseActivity {
                 if (lastVisibleItem == totalItemCount - 1 && !isLoadingMore && dy > 0) {
 
                     loadMoreData();//这里多线程也要手动控制isLoadingMore
-                    //isLoadingMore = false;
+                    //isLoadingMore = true;
                 }
+            }
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(LeaveMessages.this);
+        View dialog = View.inflate(this, R.layout.lo_commit_message, null);
+        et_input = (EditText) dialog.findViewById(R.id.et_input);
+        btn_commit = (Button) dialog.findViewById(R.id.btn_commit);
+        btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        btn_commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String input = et_input.getText().toString().trim();
+                if (input.equals("")) {
+                    generalhelper.ToastShow(LeaveMessages.this, "留言不能为空~");
+                    return;
+                } else {
+                    ZganLoginService.toGetServerData(29, 254, String.format("%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), input), handler);
+                }
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_input.setText("");
+                addDialog.dismiss();
+            }
+        });
+        builder.setView(dialog);
+        addDialog = builder.create();
+        View add = findViewById(R.id.ll_add);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // ZganLoginService.toGetServerData(29,254,String.format(""),handler);
+                addDialog.show();
             }
         });
     }
@@ -135,23 +135,21 @@ public class MessageActivity extends myBaseActivity {
 //            toSetProgressText(getResources().getString(R.string.loading));
 //            toShowProgress();
             refreshview.setRefreshing(true);
+            et_input.setText("");
             pageindex++;
             isLoadingMore = true;
-            ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), msgtype, "2015-01-01", nowdate), handler);
-            //msglst.addAll(messageDal.GetMessages(pagesize, pageindex, msgtype));
-            //adapter.notifyDataSetChanged();
+            ZganLoginService.toGetServerData(31, 254, String.format("%s\t%s\t%d", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), pageindex), handler);
         } catch (Exception ex) {
             generalhelper.ToastShow(this, ex.getMessage());
         }
     }
 
     public void loadData() {
-//        toSetProgressText(getResources().getString(R.string.loading));
-//        toShowProgress();
+        pageindex=0;
+        //refreshview.setRefreshing(true);
         isLoadingMore = false;
-        refreshview.setRefreshing(true);
         //小区ID\t帐号\t消息类型ID\t开始时间\t结束时间
-        ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), msgtype, "2015-01-01", nowdate), handler);
+        ZganLoginService.toGetServerData(31, 254, String.format("%s\t%s\t%d", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), pageindex), handler);
     }
 
     Handler handler = new Handler() {
@@ -160,24 +158,34 @@ public class MessageActivity extends myBaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
-                    generalhelper.ToastShow(MessageActivity.this, msg.obj);
-                    refreshview.setRefreshing(false);
+                    generalhelper.ToastShow(LeaveMessages.this, msg.obj);
                     break;
                 case 1:
                     Frame f = (Frame) msg.obj;
                     //String result = f.strData;
                     String[] results = f.strData.split("\t");
-                    if (f.subCmd == 26) {
+                    if (f.subCmd == 29) {
+                        addDialog.dismiss();
+                        loadData();
+                    }
+                    if (f.subCmd == 31) {
                         if (results.length == 2 && results[0].equals("0")) {
                             try {
-                                msglst = messageDal.GetMessages(results[1]);
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        bindData();
-                                        refreshview.setRefreshing(false);
-                                    }
-                                });
+                                String xmlstr = results[1].substring(results[1].indexOf("<li>"), results[1].length());
+                                if (!isLoadingMore) {
+                                    msglst = leavemsgDal.getLeaveMessages(xmlstr);
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bindData();
+                                            //toCloseProgress();
+                                            refreshview.setRefreshing(false);
+                                        }
+                                    });
+                                } else {
+                                    msglst.addAll(leavemsgDal.getLeaveMessages(xmlstr));
+                                    adapter.notifyDataSetChanged();
+                                }
                             } catch (Exception ex) {
                                 android.os.Message msg1 = new android.os.Message();
                                 msg1.what = 0;
@@ -201,54 +209,48 @@ public class MessageActivity extends myBaseActivity {
             rvmsg.setLayoutManager(mLayoutManager);
         }
         else
+        {
             adapter.notifyDataSetChanged();
+        }
 //        Animation animation = AnimationUtils.loadAnimation(this, R.anim.enter);
-//
 //        //得到一个LayoutAnimationController对象；
-//
 //        LayoutAnimationController lac = new LayoutAnimationController(animation);
-//
 //        //设置控件显示的顺序；
-//
 //        lac.setOrder(LayoutAnimationController.ORDER_NORMAL);
-//
 //        //设置控件显示间隔时间；
-//
 //        lac.setDelay(1);
-//
 //        //为ListView设置LayoutAnimationController属性；
-//
 //        rvmsg.setLayoutAnimation(lac);
     }
 
     class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
-        Message msg;
+        LeaveMessage msg;
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.lo_message_item, parent, false);
+            View view = getLayoutInflater().inflate(R.layout.lo_leave_messages_item, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             msg = msglst.get(position);
-            holder.txt_msg_type.setText(msg.getMsgType());
-            holder.txt_pub_time.setText(generalhelper.getStringFromDate(
-                    generalhelper.getDateFromString(
-                            msg.getMsgPublishTime(), date), "yyyy-MM-dd HH:mm"));
-            holder.txt_title.setText(msg.getMsgTitle());
-            holder.txt_content.setText(msg.getMsgContent());
-            holder.msg_id = msg.getMsgId();
+            String content=msg.getContent();
+            int contentIndex=content.indexOf("$$");
+            if (contentIndex>-1) {
+                content = content.substring(contentIndex+2);
+            }
+            holder.txt_content.setText(content);
+            holder.txt_pub_time.setText(msg.getDate());
+            holder.sessionid=msg.getId();
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
-                    intent.putExtra("msg_id", holder.msg_id);
-                    if (Build.VERSION.SDK_INT > 20)
-                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MessageActivity.this,holder.itemView, "content").toBundle());
-                    else
-                        startActivity(intent);
+                    Intent intent = new Intent(LeaveMessages.this, ReplyMessages.class);
+                    intent.putExtra("sessionid", holder.sessionid);
+                    intent.putExtra("content",holder.txt_content.getText().toString().trim());
+                    intent.putExtra("date",holder.txt_pub_time.getText().toString().trim());
+                    startActivityWithAnim(intent);
                 }
             });
         }
@@ -260,17 +262,20 @@ public class MessageActivity extends myBaseActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView txt_msg_type, txt_pub_time, txt_title, txt_content;
-            int msg_id;
+            TextView txt_pub_time, txt_content;
+            int sessionid;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                txt_msg_type = (TextView) itemView.findViewById(R.id.txt_msg_type);
                 txt_pub_time = (TextView) itemView.findViewById(R.id.txt_pub_time);
-                txt_title = (TextView) itemView.findViewById(R.id.txt_title);
                 txt_content = (TextView) itemView.findViewById(R.id.txt_content);
-                msg_id = 0;
+                sessionid = 0;
             }
         }
+    }
+
+    @Override
+    public void ViewClick(View v) {
+
     }
 }

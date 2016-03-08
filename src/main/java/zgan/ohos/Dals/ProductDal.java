@@ -14,14 +14,13 @@ public class ProductDal extends baseDal<Product> {
     String URL="http://192.168.1.108:10002/MallService";
     public List<Product> GetProductsInSale(int pagesize, int pageindex , int type , String key ) throws Exception
     {
-//        String SOAP_ACTION = "http://tempuri.org/IMallContract/GetProductsInSale";
-//        String MethodName = "GetProductsInSale";
-//        SoapObject request = new SoapObject(NameSpace, MethodName);
-//        request.addProperty("pagesize", pagesize);
-//        request.addProperty("pageindex", pageindex);
-//        request.addProperty("type", type);
-//        request.addProperty("key",key);
-//        return getnetobjectlist(new Product(), request, URL, SOAP_ACTION);
-        return null;
+        String SOAP_ACTION = "http://tempuri.org/IMallContract/GetProductsInSale";
+        String MethodName = "GetProductsInSale";
+        SoapObject request = new SoapObject(NameSpace, MethodName);
+        request.addProperty("pagesize", pagesize);
+        request.addProperty("pageindex", pageindex);
+        request.addProperty("type", type);
+        request.addProperty("key",key);
+        return getnetobjectlist(new Product(), request, URL, SOAP_ACTION);
     }
 }
