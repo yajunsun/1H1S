@@ -210,8 +210,13 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
         msg_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LeaveMessages.class);
-                startActivityWithAnim(getActivity(), intent);
+                if (PreferenceUtil.getCommunityId().equals("0") || PreferenceUtil.getCommunityId().equals("")) {
+                    opendialog.show();
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), LeaveMessages.class);
+                    startActivityWithAnim(getActivity(), intent);
+                }
                 houseHoldingDialog.dismiss();
             }
         });
@@ -388,7 +393,11 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
     public void startActivityIfLogin(Intent intent, int requstCode) {
         if (SystemUtils.getIsLogin()) {
             Log.v(TAG, "已登录");
-            startActivityWithAnim(getActivity(), intent);
+            if (PreferenceUtil.getCommunityId().equals("0") || PreferenceUtil.getCommunityId().equals("")) {
+                opendialog.show();
+            } else {
+                startActivityWithAnim(getActivity(), intent);
+            }
         } else {
             Log.v(TAG, "未登录");
             Intent loginIntent = new Intent(getActivity(), Login.class);

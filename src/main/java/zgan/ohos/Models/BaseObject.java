@@ -40,6 +40,14 @@ public abstract class BaseObject implements KvmSerializable {
             return 6L;
         if (modelname.equals("Message"))
             return 7L;
+        if (modelname.equals("Product"))
+            return 8L;
+        if (modelname.equals("Event"))
+            return 9L;
+        if (modelname.equals("Event_Product"))
+            return 10L;
+        if (modelname.equals("ProductType"))
+            return 11L;
 
         return 0;
     }

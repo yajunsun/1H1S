@@ -25,8 +25,8 @@ public class baseDal<T extends BaseObject> {
      * 本地數據
      ****************/
     SQLiteDatabase db;
-    String NameSpace = "http://tempuri.org/";
-    String URL = "http://60.172.246.145:10001/EventService";
+    String NameSpace = "http://service.zgantech.com";
+    String URL ="http://115.28.202.130:10001/EventService";
 
     public boolean istableExists(String tbname) {
 
@@ -288,7 +288,7 @@ public class baseDal<T extends BaseObject> {
         envelope.bodyOut = request;
         envelope.dotNet = true;
         transport = new HttpTransportSE(URL, 60000);
-
+        transport.debug=true;
         int resultCount = 0;
 //		try {
 //			transport.call(SOAP_ACTION, envelope);

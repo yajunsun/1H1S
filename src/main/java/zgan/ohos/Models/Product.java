@@ -19,6 +19,7 @@ public class Product extends BaseObject implements Serializable{
     private String Unit;
     private int Instore;
     private ProductType Type;
+
     private static final long serialVersionUID = getserialVersionUID("Product");
     public Product() {
     }

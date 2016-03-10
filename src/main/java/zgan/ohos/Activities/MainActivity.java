@@ -27,7 +27,7 @@ public class MainActivity extends myBaseActivity {
     final static int CURRENT_OPTION_CATEGORY = 2;
     final static int CURRENT_OPTION_SC = 3;
     final static int CURRENT_OPTION_MINE = 4;
-    int current_option_index = 0;
+    static int current_option_index = 0;
 //    static int badgeCount = 6;
 //    private BadgeStyle style = ActionItemBadge.BadgeStyles.RED.getStyle();
     /*********/

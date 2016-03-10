@@ -31,6 +31,7 @@ public class ZganLoginService_Listen implements Runnable {
                 String[] results = result.split(",");
                 if (frame.subCmd == 1 && results[0].equals("0")) {
                     SystemUtils.setIsLogin(true);
+                    ZganLoginService.BroadError("1");
                     ZganLoginService.toGetServerData(24, 0, PreferenceUtil.getUserName(), myhandler);
                     Log.v("suntest", "自动重新登录成功");
                 } else if (frame.subCmd == 24) {
@@ -150,6 +151,11 @@ public class ZganLoginService_Listen implements Runnable {
                 return true;
             }
         return false;
+    }
+    public void toDisConnectServer()
+    {
+        ServerState=0;
+        zsc.toCloseClient();
     }
 
 }

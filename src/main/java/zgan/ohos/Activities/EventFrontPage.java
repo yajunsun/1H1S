@@ -68,6 +68,8 @@ public class EventFrontPage extends myBaseActivity {
     private ImageLoader imageLoader;
     Toolbar toolbar;
     Event currentevent;
+    int productId=0;
+    Product currentproduct;
     int restcount = 0;
 
     @Override
@@ -111,8 +113,11 @@ public class EventFrontPage extends myBaseActivity {
 
     protected void initView() {
         setContentView(R.layout.lo_event_frontpage);
+        Intent intent=getIntent();
         if (getIntent().hasExtra("currentevent"))
-            currentevent = (Event) getIntent().getSerializableExtra("currentevent");
+            currentevent = (Event) intent.getSerializableExtra("currentevent");
+        currentproduct=(Product)intent.getSerializableExtra("currentproduct");
+        //productId=intent.getIntExtra("productId",0);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -147,28 +152,13 @@ public class EventFrontPage extends myBaseActivity {
 
     void loadData() {
         try {
-//            if (currentevent == null) {
-//                currentevent = eventDal.getFrontEvent();
-//                if (currentevent == null) {
-//                    Intent intent = new Intent(EventFrontPage.this, EventList.class);
-//                    intent.putExtra("data", EventList.PRE);
-//                    startActivity(intent);
-//                    finish();
-//                    return;
-//                } else {
-//                    //currentevent = events.get(0);
-//                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//                }
-//            } else {
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            }
             getRestCount();
-            List<Event_Product> event_products = event_productDal.getEventProductByEvent(currentevent.getId());
-            Product product = event_products.get(0).getProduct();
-            List<Product_Pics> pics = product_picsDal.getProductPics(product.getId());
+            //List<Event_Product> event_products = event_productDal.getEventProductByEvent(currentevent.getId());
+             //currentproduct=event_productDal.getEventProductByEvent(productId).get(0);
+            List<Product_Pics> pics = product_picsDal.getProductPics(currentproduct.getId());
 
-            txt_product_name.setText(product.getName());
-            txt_product_detail.setText(product.getDescription());
+            txt_product_name.setText(currentproduct.getName());
+            txt_product_detail.setText(currentproduct.getDescription());
             txt_event_rule.setText(currentevent.getErules());
             Date date = new Date();
             txt_event_time.setText(generalhelper.getStringFromDate(
@@ -186,8 +176,8 @@ public class EventFrontPage extends myBaseActivity {
                 btn_order.setText(R.string.event_frontpage_overivalied_event);
             }
             txt_event_restrict_member.setText(String.valueOf(currentevent.getRestrict_members()));
-            txt_product_price.setText(String.valueOf(product.getPrice()));
-            txt_product_unit.setText(product.getUnit());
+            txt_product_price.setText(String.valueOf(currentproduct.getPrice()));
+            txt_product_unit.setText(currentproduct.getUnit());
             txt_event_preMoney.setText(String.valueOf(currentevent.getPre_money()));
             if (currentevent.getPre_money() > 0)
                 ll_pre_check_money.setVisibility(View.VISIBLE);

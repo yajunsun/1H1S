@@ -107,6 +107,7 @@ public class LeaveMessages extends myBaseActivity {
                     generalhelper.ToastShow(LeaveMessages.this, "留言不能为空~");
                     return;
                 } else {
+                    btn_commit.setEnabled(false);
                     ZganLoginService.toGetServerData(29, 254, String.format("%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), input), handler);
                 }
             }
@@ -167,6 +168,7 @@ public class LeaveMessages extends myBaseActivity {
                     if (f.subCmd == 29) {
                         addDialog.dismiss();
                         loadData();
+                        btn_commit.setEnabled(true);
                     }
                     if (f.subCmd == 31) {
                         if (results.length == 2 && results[0].equals("0")) {

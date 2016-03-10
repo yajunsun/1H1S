@@ -13,7 +13,7 @@ import zgan.ohos.Models.Partin;
  */
 public class PartinDal extends baseDal<Partin> {
     public String PartIn(int eventId, String PhoneNum, String HomeAdress) throws Exception {
-        String SOAP_ACTION = "http://tempuri.org/IEventsContract/PartIn";
+        String SOAP_ACTION = "http://download1.zgantech.com/IEventsContract/PartIn";
         String MethodName = "PartIn";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         request.addProperty("eventId", eventId);
@@ -23,7 +23,7 @@ public class PartinDal extends baseDal<Partin> {
     }
 
     public String SavePartIn(Partin p) throws Exception {
-        String SOAP_ACTION = "http://tempuri.org/IEventsContract/SavePartIn";
+        String SOAP_ACTION = "http://service.zgantech.com/IEventsContract/SavePartIn";
         String MethodName = "SavePartIn";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         request.addProperty("p", p);
@@ -36,7 +36,7 @@ public class PartinDal extends baseDal<Partin> {
     }
 
     public int PartedinMembers(int eventId) throws Exception {
-        String SOAP_ACTION = "http://tempuri.org/IEventsContract/PartedinMembers";
+        String SOAP_ACTION = "http://service.zgantech.com/IEventsContract/PartedinMembers";
         String MethodName = "PartedinMembers";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         request.addProperty("eventId", eventId);
@@ -44,7 +44,7 @@ public class PartinDal extends baseDal<Partin> {
     }
 
     public List<Partin> getPartinMembers(int eventId) throws Exception {
-        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getPartinMembers";
+        String SOAP_ACTION = "http://service.zgantech.com/IEventsContract/getPartinMembers";
         String MethodName = "getPartinMembers";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         request.addProperty("eventId", eventId);

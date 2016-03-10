@@ -181,7 +181,7 @@ public class ZganLoginService_Main implements Runnable {
         isGetData = false;
         // getFrame=null;
 
-        ZganLoginService_Listen.ServerState = 2;
+        //ZganLoginService_Listen.ServerState = 2;
     }
 
     private boolean checkUserLogin(String strData) {

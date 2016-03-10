@@ -3,13 +3,15 @@ package zgan.ohos.Models;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
 /**
  * Created by Administrator on 2016/1/11.
  */
-public class ProductType extends BaseObject {
+public class ProductType extends BaseObject implements Serializable {
 
+    private static final long serialVersionUID = getserialVersionUID("ProductType");
     public ProductType(){}
     public ProductType(SoapObject soapObject)
     {

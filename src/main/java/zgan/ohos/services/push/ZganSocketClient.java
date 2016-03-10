@@ -1,14 +1,6 @@
 package zgan.ohos.services.push;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-
-
-import zgan.ohos.MyApplication;
-import zgan.ohos.services.login.ZganLoginService;
-import zgan.ohos.utils.Frame;
-import zgan.ohos.utils.FrameTools;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +13,10 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
+import zgan.ohos.services.login.ZganLoginService;
+import zgan.ohos.utils.Frame;
+import zgan.ohos.utils.FrameTools;
 
 
 public class ZganSocketClient {
@@ -320,12 +316,13 @@ public class ZganSocketClient {
                         }
 
                     } catch (IOException e) {
-                        ZganLoginService.BroadError("服务器错误");
+                        ZganLoginService.BroadError("服务器错误,重新启动连接服务");
                         LastSocketStatus=false;
                         isRun = false;
                         // TODO Auto-generated catch block
                         //e.printStackTrace();
                         Log.v("suntest", "receive error 1" + e.getMessage());
+                        ZganLoginService.myhandler.sendEmptyMessage(0);  ///toRestartLoginSerice();
                     }
                 }
             }

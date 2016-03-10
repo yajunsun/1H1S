@@ -1,7 +1,5 @@
 package zgan.ohos.Models;
 
-import android.os.Parcelable;
-
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 

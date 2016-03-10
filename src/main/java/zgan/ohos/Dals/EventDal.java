@@ -11,7 +11,7 @@ import zgan.ohos.Models.Event;
  */
 public class EventDal extends baseDal<Event> {
     public List<Event> getCurrentEvents(String datestr) throws Exception {
-        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getCurrentEvents";
+        String SOAP_ACTION = "http://service.zgantech.com/IEventsContract/getCurrentEvents";
         String MethodName = "getCurrentEvents";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         request.addProperty("datestr", datestr);
@@ -19,7 +19,7 @@ public class EventDal extends baseDal<Event> {
     }
 
     public List<Event> getPreViewEvents(String datestr) throws Exception {
-        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getPreViewEvents";
+        String SOAP_ACTION = "http://service.zgantech.com/IEventsContract/getPreViewEvents";
         String MethodName = "getPreViewEvents";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         request.addProperty("datestr", datestr);
@@ -27,7 +27,7 @@ public class EventDal extends baseDal<Event> {
     }
 
     public List<Event> getEvent(int Id) throws Exception {
-        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getEvent";
+        String SOAP_ACTION = "http://service.zgantech.com/IEventsContract/getEvent";
         String MethodName = "getEvent";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         request.addProperty("Id", Id);
@@ -35,7 +35,7 @@ public class EventDal extends baseDal<Event> {
     }
 
     public Event getFrontEvent() throws Exception {
-        String SOAP_ACTION = "http://tempuri.org/IEventsContract/getFrontEvent";
+        String SOAP_ACTION = "http://service.zgantech.com/IEventsContract/getFrontEvent";
         String MethodName = "getFrontEvent";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         return getnetobject(new Event(), request, URL, SOAP_ACTION);
