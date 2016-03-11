@@ -58,10 +58,6 @@ public class ZganLoginService extends Service {
     private static SharedPreferences ZganInfo;
     public static int LoginServerState = 0;  //0:登录用户,1:获取IP列表,2:其它方法
 
-    public ZganLoginService() {
-
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -69,32 +65,33 @@ public class ZganLoginService extends Service {
         toStartLoginService();
     }
 
-    public static Handler myhandler = new Handler(Looper.getMainLooper()) {
+    public static Handler myhandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Log.v("suntest", "ZganLoginServicehandle:" + msg.what);
             if (msg.what==0)
             {
                 toRestartLoginSerice();
             }
-            if (msg.what == 1) {//autologin
+           else if (msg.what == 1) {//autologin
                 Frame frame = (Frame) msg.obj;
                 String result = generalhelper.getSocketeStringResult(frame.strData);
                 String[] results = result.split(",");
                 if (frame.subCmd == 1 && results[0].equals("0")) {
                     SystemUtils.setIsLogin(true);
                     toGetServerData(24, 0, PreferenceUtil.getUserName(), myhandler);
-                    Log.v("suntest", "自动重新登录成功");
+                    Log.v("suntest", "ZganLoginService自动重新登录成功");
                 } else if (frame.subCmd == 24) {
                     String communityId = PreferenceUtil.getCommunityId();
                     if (results.length == 2 && results[0].equals("0")) {
-                        Log.v("suntest", "小区ID：" + results[1]);
+                        Log.v("suntest", "ZganLoginService小区ID：" + results[1]);
                         if (!communityId.equals(results[1])) {
                             PreferenceUtil.setCommunityId(results[1]);
                         }
                     }
                 } else {
-                    Log.v("suntest", "自动重新登录失败");
+                    Log.v("suntest", "ZganLoginService自动重新登录失败");
                 }
             }
         }
@@ -110,7 +107,7 @@ public class ZganLoginService extends Service {
      * 用户登录
      */
     public static void toUserLogin(String strUName, String strPwd, String strImei, Handler _handler) {
-        Log.v("suntest", " log in");
+        Log.v("suntest", "ZganLoginService log in");
         Frame f = createFrame();
         f.subCmd = 1;
         f.strData = strUName + "\t" + strPwd + "\t" + strImei + "\t0";
@@ -136,7 +133,7 @@ public class ZganLoginService extends Service {
         String strPwd = PreferenceUtil.getPassWord(); //"123456";//toGetDB(ZGAN_USERPWD);
         //"8886c1f212ae6576";//toGetDB(ZGAN_USERIMEI);
 
-        Log.v("suntest", "auto login");
+        Log.v("suntest", "ZganLoginServiceauto login");
         if (!TextUtils.isEmpty(strUserName) && !TextUtils.isEmpty(strPwd)) {
             try {
                 String strImei = LocationUtil.getDrivenToken(MyApplication.context, strUserName);
@@ -191,9 +188,15 @@ public class ZganLoginService extends Service {
         f.zip = zip;
         f._handler = _handler;
 
-//        ztl.toConnectServer();
-//
-//        ZganLoginService.LoginServerState = 2;
+        toGetData(f);
+    }
+    public static void toGetServerData(int subcmd, int zip,int ver, String strData, Handler _handler) {
+        Frame f = createFrame();
+        f.subCmd = subcmd;
+        f.strData = strData;
+        f.zip = zip;
+        f._handler = _handler;
+        f.version=ver;
 
         toGetData(f);
     }
@@ -283,19 +286,21 @@ public class ZganLoginService extends Service {
     public static void toRestartLoginSerice() {
         ServiceRin = false;
         ztl.toDisConnectServer();
-        _threadMain.interrupt();
         _threadListen.interrupt();
+        _threadMain.interrupt();
+        _threadListen=null;
+        _threadMain=null;
         toStartLoginService();
-        Log.v("suntest","重新登录");
+        Log.v("suntest","toRestartLoginSerice");
         toAutoUserLogin(myhandler);
     }
 
     //启动登录服务线程
     public static void toStartLoginService() {
         if (!ServiceRin) {
-            Log.v("suntest", "start service");
+            Log.v("suntest", "ZganLoginServicestart service");
             LoginService_IP = toGetHostIP();
-            Log.v("suntest", "get host ip");
+            Log.v("suntest", "ZganLoginServiceget host ip");
             //_zgan_context = context;
 
             ZganInfo = _zgan_context.getSharedPreferences(ZGAN_DBNAME, Context.MODE_PRIVATE);

@@ -137,7 +137,7 @@ public class MessageActivity extends myBaseActivity {
             refreshview.setRefreshing(true);
             pageindex++;
             isLoadingMore = true;
-            ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), msgtype, "2015-01-01", nowdate), handler);
+            ZganLoginService.toGetServerData(26, 254,2, String.format("%s\t%s\t%s\t%s\t%s\t%d", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), msgtype, "2015-01-01", nowdate,pageindex), handler);
             //msglst.addAll(messageDal.GetMessages(pagesize, pageindex, msgtype));
             //adapter.notifyDataSetChanged();
         } catch (Exception ex) {
@@ -151,7 +151,7 @@ public class MessageActivity extends myBaseActivity {
         isLoadingMore = false;
         refreshview.setRefreshing(true);
         //小区ID\t帐号\t消息类型ID\t开始时间\t结束时间
-        ZganLoginService.toGetServerData(26, 254, String.format("%s\t%s\t%s\t%s\t%s", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), msgtype, "2015-01-01", nowdate), handler);
+        ZganLoginService.toGetServerData(26, 254,2, String.format("%s\t%s\t%s\t%s\t%s\t%d", PreferenceUtil.getCommunityId(), PreferenceUtil.getUserName(), msgtype, "2015-01-01", nowdate,pageindex), handler);
     }
 
     Handler handler = new Handler() {
@@ -170,7 +170,10 @@ public class MessageActivity extends myBaseActivity {
                     if (f.subCmd == 26) {
                         if (results.length == 2 && results[0].equals("0")) {
                             try {
+                                if (!isLoadingMore)
                                 msglst = messageDal.GetMessages(results[1]);
+                                else
+                                msglst.addAll(messageDal.GetMessages(results[1]));
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {

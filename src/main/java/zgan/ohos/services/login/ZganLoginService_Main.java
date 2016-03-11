@@ -26,7 +26,7 @@ public class ZganLoginService_Main implements Runnable {
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        Log.v("suntest","Main");
+        Log.v("suntest", "ZganLoginService_MainMain");
         Thread tt = new Thread(new Thread_SendOutTime());
         tt.start();
 
@@ -53,7 +53,7 @@ public class ZganLoginService_Main implements Runnable {
                             resultByte = Queue.poll();
 
                             Frame f = new Frame(resultByte);
-                            Log.v("suntest","接收到数据"+f.subCmd);
+                            Log.v("suntest", "ZganLoginService_Main接收到数据"+f.subCmd);
                             //modified by yajunsun 20151218暂时修改
                             intTime = 0;
                             isSendOutTime = false;
@@ -169,6 +169,7 @@ public class ZganLoginService_Main implements Runnable {
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+                continue;
             }
 
         }
@@ -298,6 +299,7 @@ public class ZganLoginService_Main implements Runnable {
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                    break;
                 }
             }
         }
