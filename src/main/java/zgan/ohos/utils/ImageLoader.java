@@ -7,6 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.android.volley.toolbox.ImageRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -29,19 +33,29 @@ import zgan.ohos.MyApplication;
  * Created by yajunsun on 2015/11/12.
  */
 public final class ImageLoader {
-    private static final String TAG = "ImageDownloader";
+    private static final String TAG = "suntest";
+    private static final long DISK_CACHE_SIZE = 1004 * 1024 * 80;
     private static int maxMemery = (int) (Runtime.getRuntime().maxMemory() / 1024);
     private static LruCache<String, Bitmap> imageCaches = new LruCache<String, Bitmap>(
             maxMemery / 8) {
         @Override
         protected int sizeOf(String key, Bitmap bitmap) {
-            return bitmap.getByteCount() / 1024;
+            return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
         }
     };
+    public static DiskLruCache diskLruCache;
 
-//    private int viewWidth = 100;
-//    private int viewHeigth = 100;
-//    private Bitmap currBitmap = null;
+    static {
+        try {
+            if (!getDiskCacheDir().exists())
+                getDiskCacheDir().mkdir();
+            if (getUsableSpace(getDiskCacheDir()) > DISK_CACHE_SIZE)
+                diskLruCache = DiskLruCache.open(getDiskCacheDir(), 1, 1, DISK_CACHE_SIZE);
+        } catch (IOException e) {
+            Log.v(TAG, e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     public ImageLoader() {
     }
@@ -102,7 +116,7 @@ public final class ImageLoader {
     /**
      * 加载SD卡图片或网络图片
      *
-     * @param uri   图片uri
+     * @param uri         图片uri
      * @param mImageView  显示图片的控件
      * @param download    回调接口
      * @param _viewWidth  图像控件的宽
@@ -232,7 +246,7 @@ public final class ImageLoader {
     }
 
     public Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                   int reqWidth, int reqHeight) {
+                                                  int reqWidth, int reqHeight) {
         // 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -245,7 +259,7 @@ public final class ImageLoader {
     }
 
     public Bitmap decodeSampledBitmapFromAssets(Resources res, String imgname,
-                                                 int reqWidth, int reqHeight) {
+                                                int reqWidth, int reqHeight) {
         try {
             // 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -297,7 +311,7 @@ public final class ImageLoader {
     }
 
     public boolean setBitmapToFile(String path, Activity mActivity,
-                                    String imageName, Bitmap bitmap) {
+                                   String imageName, Bitmap bitmap) {
         File file;
         String real_path;
         try {
@@ -342,7 +356,7 @@ public final class ImageLoader {
     }
 
     public void removeBitmapFromFile(String path, Activity mActivity,
-                                      String imageName) {
+                                     String imageName) {
         File file;
         String real_path;
         try {
@@ -361,6 +375,24 @@ public final class ImageLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    static File getDiskCacheDir() {
+        boolean externalStorageAvailable = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+        final String cachePath;
+        if (externalStorageAvailable) {
+            cachePath = MyApplication.context.getExternalCacheDir().getPath();
+        } else {
+            cachePath = MyApplication.context.getCacheDir().getPath();
+        }
+        return new File(cachePath + File.separator + "cachefiles");
+    }
+
+    static long getUsableSpace(File path) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+            return path.getUsableSpace();
+        final StatFs stats = new StatFs(path.getPath());
+        return (long) stats.getBlockSize() * (long) stats.getAvailableBlocks();
     }
     /****************************************************/
 }

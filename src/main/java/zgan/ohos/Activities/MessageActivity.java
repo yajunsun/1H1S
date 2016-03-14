@@ -40,16 +40,16 @@ public class MessageActivity extends myBaseActivity {
     List<Message> msglst;
     MessageDal messageDal;
     int pageindex = 0;
-    int pagesize = 20;
+    //int pagesize = 20;
     int msgtype = 0;
     myAdapter adapter;
-    boolean[] isopen;
+    //boolean[] isopen;
     LinearLayoutManager mLayoutManager;
     boolean isLoadingMore = false;
     final static String SHEQUGONGGAO = "社区公告";
     final static String YANGGUANGYUBEI = "阳光渝北";
     String nowdate;
-    Dialog detailDialog;
+    //Dialog detailDialog;
     Date date;
 
     @Override
@@ -248,9 +248,10 @@ public class MessageActivity extends myBaseActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(MessageActivity.this, MessageDetailActivity.class);
                     intent.putExtra("msg_id", holder.msg_id);
-                    if (Build.VERSION.SDK_INT > 20)
-                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MessageActivity.this,holder.itemView, "content").toBundle());
-                    else
+                    refreshview.setRefreshing(false);
+//                    if (Build.VERSION.SDK_INT > 20)
+//                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MessageActivity.this,holder.itemView, "content").toBundle());
+//                    else
                         startActivity(intent);
                 }
             });

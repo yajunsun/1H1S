@@ -337,10 +337,10 @@ public class fg_myaccount extends myBaseFragment implements View.OnClickListener
         // "com.android.camera.CropImage");
         intent.setDataAndType(photoUri, "image/*");
         intent.putExtra("crop", "true");
-//        intent.putExtra("aspectX", 1);
-//        intent.putExtra("aspectY", 1);
-//        intent.putExtra("outputX", 150);
-//        intent.putExtra("outputY", 150);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
         intent.putExtra("return-data", true);
         return intent;
     }

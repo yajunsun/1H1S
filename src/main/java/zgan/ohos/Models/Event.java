@@ -18,6 +18,7 @@ public class Event extends BaseObject implements Serializable{
     private String eTime;
     private int restrict_Members;
     private float pre_Money;
+    private String eImage;
 
     private static final long serialVersionUID = getserialVersionUID("Event");
     public Event() {
@@ -135,6 +136,16 @@ public class Event extends BaseObject implements Serializable{
             this.eRules = value.toString();
     }
 
+    public String getEimage()
+    {
+        return eImage;
+    }
+
+    public void setEimage(Object value)
+    {
+        if (value!=null)
+            this.eImage=value.toString();
+    }
     @Override
     public String gettablename() {
         return this.getClass().getCanonicalName();
@@ -162,6 +173,8 @@ public class Event extends BaseObject implements Serializable{
                 return pre_Money;
             case 6:
                 return eRules;
+            case 7:
+                return eImage;
             default:
                 return null;
         }
@@ -169,7 +182,7 @@ public class Event extends BaseObject implements Serializable{
 
     @Override
     public int getPropertyCount() {
-        return 7;
+        return 8;
     }
 
     @Override
@@ -196,6 +209,9 @@ public class Event extends BaseObject implements Serializable{
                     break;
                 case 6:
                     eRules = o.toString();
+                    break;
+                case 7:
+                    eImage=o.toString();
                     break;
                 default:
                     break;
@@ -234,6 +250,10 @@ public class Event extends BaseObject implements Serializable{
             case 6:
                 propertyInfo.type = PropertyInfo.STRING_CLASS;
                 propertyInfo.name = "eRules";
+                break;
+            case 7:
+                propertyInfo.type=PropertyInfo.STRING_CLASS;
+                propertyInfo.name="eImage";
                 break;
             default:
                 break;
