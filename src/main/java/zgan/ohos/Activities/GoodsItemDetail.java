@@ -112,12 +112,13 @@ public class GoodsItemDetail extends AppCompatActivity {
         int window_width = p.x;
         for (String drawable : ads) {
             ImageView img = new ImageView(this);
-            imageLoader.loadImage(drawable, img, new IImageloader() {
-                @Override
-                public void onDownloadSucc(Bitmap bitmap, String c_url, View imageView) {
-                    ((ImageView)imageView).setImageBitmap(bitmap);
-                }
-            }, window_width, 240);
+//            imageLoader.loadImage(drawable, img, new IImageloader() {
+//                @Override
+//                public void onDownloadSucc(Bitmap bitmap, String c_url, View imageView) {
+//                    ((ImageView)imageView).setImageBitmap(bitmap);
+//                }
+//            }, window_width, 240);
+            ImageLoader.bindBitmap(drawable,img,window_width,240);
 
             //img.setImageDrawable(getResources().getDrawable(drawable));
             advPics.add(img);

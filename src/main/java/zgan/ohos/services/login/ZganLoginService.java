@@ -36,6 +36,7 @@ public class ZganLoginService extends Service {
     public static String UPwd = "";
     public static String UIMIE = "";
     public static int Tag = 0;
+    public static final String TAG="ZganLoginService";
 
     //正式115.29.147.12  测试60.172.246.193
     private final static String ZGAN_LOGIN_DOMAINNAME = "cloudlogin1.zgantech.com";//"cloudlogin.zgantech.com";
@@ -69,7 +70,7 @@ public class ZganLoginService extends Service {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Log.v("suntest", "ZganLoginServicehandle:" + msg.what);
+            Log.v("TAG", "ZganLoginServicehandle:" + msg.what);
             if (msg.what==0)
             {
                 toRestartLoginSerice();
@@ -81,17 +82,17 @@ public class ZganLoginService extends Service {
                 if (frame.subCmd == 1 && results[0].equals("0")) {
                     SystemUtils.setIsLogin(true);
                     toGetServerData(24, 0, PreferenceUtil.getUserName(), myhandler);
-                    Log.v("suntest", "ZganLoginService自动重新登录成功");
+                    Log.v("TAG", "ZganLoginService自动重新登录成功");
                 } else if (frame.subCmd == 24) {
                     String communityId = PreferenceUtil.getCommunityId();
                     if (results.length == 2 && results[0].equals("0")) {
-                        Log.v("suntest", "ZganLoginService小区ID：" + results[1]);
+                        Log.v("TAG", "ZganLoginService小区ID：" + results[1]);
                         if (!communityId.equals(results[1])) {
                             PreferenceUtil.setCommunityId(results[1]);
                         }
                     }
                 } else {
-                    Log.v("suntest", "ZganLoginService自动重新登录失败");
+                    Log.v("TAG", "ZganLoginService自动重新登录失败");
                 }
             }
         }
@@ -107,7 +108,7 @@ public class ZganLoginService extends Service {
      * 用户登录
      */
     public static void toUserLogin(String strUName, String strPwd, String strImei, Handler _handler) {
-        Log.v("suntest", "ZganLoginService log in");
+        Log.v(TAG, "ZganLoginService log in");
         Frame f = createFrame();
         f.subCmd = 1;
         f.strData = strUName + "\t" + strPwd + "\t" + strImei + "\t0";
@@ -133,7 +134,7 @@ public class ZganLoginService extends Service {
         String strPwd = PreferenceUtil.getPassWord(); //"123456";//toGetDB(ZGAN_USERPWD);
         //"8886c1f212ae6576";//toGetDB(ZGAN_USERIMEI);
 
-        Log.v("suntest", "ZganLoginServiceauto login");
+        Log.v(TAG, "ZganLoginServiceauto login");
         if (!TextUtils.isEmpty(strUserName) && !TextUtils.isEmpty(strPwd)) {
             try {
                 String strImei = LocationUtil.getDrivenToken(MyApplication.context, strUserName);
@@ -291,16 +292,16 @@ public class ZganLoginService extends Service {
         _threadListen=null;
         _threadMain=null;
         toStartLoginService();
-        Log.v("suntest","toRestartLoginSerice");
+        Log.v(TAG,"toRestartLoginSerice");
         toAutoUserLogin(myhandler);
     }
 
     //启动登录服务线程
     public static void toStartLoginService() {
         if (!ServiceRin) {
-            Log.v("suntest", "ZganLoginServicestart service");
+            Log.v(TAG, "ZganLoginServicestart service");
             LoginService_IP = toGetHostIP();
-            Log.v("suntest", "ZganLoginServiceget host ip");
+            Log.v(TAG, "ZganLoginServiceget host ip");
             //_zgan_context = context;
 
             ZganInfo = _zgan_context.getSharedPreferences(ZGAN_DBNAME, Context.MODE_PRIVATE);
@@ -380,5 +381,15 @@ public class ZganLoginService extends Service {
         bundle.putString("msg", error);
         intent.putExtras(bundle);
         MyApplication.context.sendBroadcast(intent);
+    }
+
+    @Override
+    public boolean stopService(Intent name) {
+        ztl.toDisConnectServer();
+        _threadListen.interrupt();
+        _threadMain.interrupt();
+        Log.v(TAG, "ZganLoginService stoped");
+        Log.i(TAG, "ZganLoginService stoped");
+        return super.stopService(name);
     }
 }

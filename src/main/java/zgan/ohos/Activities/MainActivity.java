@@ -16,6 +16,7 @@ import zgan.ohos.Fgmt.fg_myaccount;
 import zgan.ohos.Fgmt.fg_myfront;
 import zgan.ohos.Fgmt.fg_myorder;
 import zgan.ohos.R;
+import zgan.ohos.services.login.ZganLoginService;
 import zgan.ohos.utils.SystemUtils;
 import zgan.ohos.utils.resultCodes;
 
@@ -79,7 +80,6 @@ public class MainActivity extends myBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v(TAG, "destroied");
     }
 
     @Override
@@ -255,8 +255,11 @@ public class MainActivity extends myBaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent=new Intent(MainActivity.this, ZganLoginService.class);
+            stopService(intent);
+            Log.v(TAG, "service stoped,activity destroied");
             android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);
+            System.exit(0);
         }
         return false;
     }

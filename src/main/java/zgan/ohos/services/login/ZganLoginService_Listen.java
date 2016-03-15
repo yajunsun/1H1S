@@ -16,6 +16,7 @@ import zgan.ohos.utils.generalhelper;
 public class ZganLoginService_Listen implements Runnable {
 
     private ZganSocketClient zsc;
+    private static final String TAG="ZganLoginService_Listen";
     public static int ServerState = 0;
     private Context _context;
     private boolean iniNetState = false;
@@ -32,20 +33,20 @@ public class ZganLoginService_Listen implements Runnable {
                     SystemUtils.setIsLogin(true);
                     ZganLoginService.BroadError("1");
                     ZganLoginService.toGetServerData(24, 0, PreferenceUtil.getUserName(), myhandler);
-                    Log.v("suntest", "ZganLoginService_Listen自动重新登录成功");
-                    Log.i("suntest", "ZganLoginService_Listen自动重新登录成功");
+                    Log.v(TAG, "ZganLoginService_Listen自动重新登录成功");
+                    Log.i(TAG, "ZganLoginService_Listen自动重新登录成功");
                 } else if (frame.subCmd == 24) {
                     String communityId = PreferenceUtil.getCommunityId();
                     if (results.length == 2 && results[0].equals("0")) {
-                        Log.v("suntest", "ZganLoginService_Listen小区ID：" + results[1]);
-                        Log.i("suntest", "ZganLoginService_Listen小区ID：" + results[1]);
+                        Log.v(TAG, "ZganLoginService_Listen小区ID：" + results[1]);
+                        Log.i(TAG, "ZganLoginService_Listen小区ID：" + results[1]);
                         if (!communityId.equals(results[1])) {
                             PreferenceUtil.setCommunityId(results[1]);
                         }
                     }
                 } else {
-                    Log.v("suntest", "ZganLoginService_Listen自动重新登录失败");
-                    Log.i("suntest", "ZganLoginService_Listen自动重新登录失败");
+                    Log.v(TAG, "ZganLoginService_Listen自动重新登录失败");
+                    Log.i(TAG, "ZganLoginService_Listen自动重新登录失败");
                 }
             }
         }
@@ -94,49 +95,49 @@ public class ZganLoginService_Listen implements Runnable {
                     if (!isNet) {
                         ServerState = 2;
                         ZganLoginService.BroadError("网络连接错误");
-                        Log.v("suntest", "ZganLoginService_Listen1ServerState=" + ServerState);
-                        Log.i("suntest", "ZganLoginService_Listen1ServerState=" + ServerState);
+                        Log.v(TAG, "ZganLoginService_Listen1ServerState=" + ServerState);
+                        Log.i(TAG, "ZganLoginService_Listen1ServerState=" + ServerState);
                     }
 
                     if (zsc.client.isClosed()) {
                         ServerState = 2;
-                        Log.v("suntest", "ZganLoginService_Listen2ServerState=" + ServerState);
-                        Log.i("suntest", "ZganLoginService_Listen2ServerState=" + ServerState);
+                        Log.v(TAG, "ZganLoginService_Listen2ServerState=" + ServerState);
+                        Log.i(TAG, "ZganLoginService_Listen2ServerState=" + ServerState);
                     }
 
                     if (!zsc.isRun) {
                         ServerState = 2;
-                        Log.v("suntest", "ZganLoginService_Listen3ServerState=" + ServerState);
-                        Log.i("suntest", "ZganLoginService_Listen3ServerState=" + ServerState);
+                        Log.v(TAG, "ZganLoginService_Listen3ServerState=" + ServerState);
+                        Log.i(TAG, "ZganLoginService_Listen3ServerState=" + ServerState);
                     }
 
                 } else if (ServerState == 0) {
 
                     if (isNet) {
-                        Log.i("suntest", "ZganLoginService_Listen client 重新连接");
-                        Log.v("suntest", "ZganLoginService_Listen client 重新连接");
+                        Log.i(TAG, "ZganLoginService_Listen client 重新连接");
+                        Log.v(TAG, "ZganLoginService_Listen client 重新连接");
                         ServerState = 3;
                         zsc.Server_IP = ZganLoginService.toGetHostIP();
-                        Log.v("suntest", "ZganLoginService_Listenconnect to=" + zsc.Server_IP);
-                        Log.i("suntest", "ZganLoginService_Listenconnect to=" + zsc.Server_IP);
+                        Log.v(TAG, "ZganLoginService_Listenconnect to=" + zsc.Server_IP);
+                        Log.i(TAG, "ZganLoginService_Listenconnect to=" + zsc.Server_IP);
                         if (zsc.toConnectServer()) {
                             ServerState = 1;
-                            Log.v("suntest", "ZganLoginService_Listen5ServerState=" + ServerState);
-                            Log.i("suntest", "ZganLoginService_Listen5ServerState=" + ServerState);
+                            Log.v(TAG, "ZganLoginService_Listen5ServerState=" + ServerState);
+                            Log.i(TAG, "ZganLoginService_Listen5ServerState=" + ServerState);
                             ZganLoginServiceTools.isConnect = true;
                             //LoginMsgServer(UName);
                             ZganLoginService.toAutoUserLogin(myhandler);
                         } else {
-                            Log.v("suntest", zsc.client == null ? "空 socket" : "非空socket");
-                            Log.i("suntest", zsc.client == null ? "空 socket" : "非空socket");
-                            Log.v("suntest", zsc.client.isClosed() ? "socket关闭状态" : "socket打开状态");
-                            Log.i("suntest", zsc.client.isClosed() ? "socket关闭状态" : "socket打开状态");
+                            Log.v(TAG, zsc.client == null ? "空 socket" : "非空socket");
+                            Log.i(TAG, zsc.client == null ? "空 socket" : "非空socket");
+                            Log.v(TAG, zsc.client.isClosed() ? "socket关闭状态" : "socket打开状态");
+                            Log.i(TAG, zsc.client.isClosed() ? "socket关闭状态" : "socket打开状态");
                             if (zsc.client != null && !zsc.client.isClosed())
                                 zsc.toConnectDisconnect();
                             //newSocketClient();
                             ServerState = 0;
-                            Log.v("suntest", "ZganLoginService_Listen6ServerState=" + ServerState);
-                            Log.i("suntest", "ZganLoginService_Listen6ServerState=" + ServerState);
+                            Log.v(TAG, "ZganLoginService_Listen6ServerState=" + ServerState);
+                            Log.i(TAG, "ZganLoginService_Listen6ServerState=" + ServerState);
                         }
 
                     }
@@ -144,18 +145,18 @@ public class ZganLoginService_Listen implements Runnable {
                 } else if (ServerState == 2) {
                     //网络断开
                     ZganLoginServiceTools.isConnect = false;
-                    Log.v("suntest", "ZganLoginService_Listenclient 断开连接");
-                    Log.i("suntest", "ZganLoginService_Listenclient 断开连接");
+                    Log.v(TAG, "ZganLoginService_Listenclient 断开连接");
+                    Log.i(TAG, "ZganLoginService_Listenclient 断开连接");
                     zsc.toConnectDisconnect();
                     ServerState = 0;
-                    Log.v("suntest", "7ServerState=" + ServerState);
-                   // Log.v("suntest", "client 重新连接");
+                    Log.v(TAG, "7ServerState=" + ServerState);
+                   // Log.v(TAG, "client 重新连接");
                     //toConnectServer();
                 }
             }catch (Exception e)
             {
-                Log.v("suntest","ZganLoginService_Listen"+e.getMessage());
-                Log.i("suntest","ZganLoginService_Listen"+e.getMessage());
+                Log.v(TAG,"ZganLoginService_Listen"+e.getMessage());
+                Log.i(TAG,"ZganLoginService_Listen"+e.getMessage());
                 continue;
             }
         }
@@ -163,7 +164,7 @@ public class ZganLoginService_Listen implements Runnable {
     }
 
     public boolean toConnectServer() {
-        Log.v("suntest", zsc.isRun ? "繁忙" : "空闲");
+        Log.v(TAG, zsc.isRun ? "繁忙" : "空闲");
         if (!zsc.isRun)
             if (zsc.toConnectServer()) {
                 ServerState = 1;
@@ -173,7 +174,7 @@ public class ZganLoginService_Listen implements Runnable {
     }
     public void toDisConnectServer()
     {
-        Log.v("suntest","toDisConnectServer");
+        Log.v(TAG,"toDisConnectServer");
         ServerState=0;
         zsc.toCloseClient();
     }

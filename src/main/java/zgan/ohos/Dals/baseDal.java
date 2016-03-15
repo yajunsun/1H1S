@@ -26,7 +26,7 @@ public class baseDal<T extends BaseObject> {
      ****************/
     SQLiteDatabase db;
     String NameSpace = "http://service.zgantech.com";
-    String URL ="http://192.168.1.108:10001/EventService"; //"http://115.28.202.130:10001/EventService";
+    String URL ="http://115.28.202.130:10001/EventService";//"http://192.168.1.108:10001/EventService"; //"http://115.28.202.130:10001/EventService";
 
     public boolean istableExists(String tbname) {
 

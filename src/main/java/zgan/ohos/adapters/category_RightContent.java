@@ -42,7 +42,8 @@ public class category_RightContent extends RecyclerView.Adapter<category_RightCo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        imageLoader.loadImage(picurls[position], holder.ivsample, new OnImageDownload(), 200, 200);
+//        imageLoader.loadImage(picurls[position], holder.ivsample, new OnImageDownload(), 200, 200);
+        ImageLoader.bindBitmap(picurls[position],holder.ivsample,200,200);
         final Intent intent = new Intent(context, GoodsItemDetail.class);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

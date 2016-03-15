@@ -211,12 +211,13 @@ public class EventFrontPage extends myBaseActivity {
         int window_width = p.x;
         for (Product_Pics pic : pics) {
             ImageView img = new ImageView(this);
-            imageLoader.loadImage(pic.getPicName(), img, new IImageloader() {
-                @Override
-                public void onDownloadSucc(Bitmap bitmap, String c_url, View imageView) {
-                    ((ImageView) imageView).setImageBitmap(bitmap);
-                }
-            }, window_width, 240);
+//            imageLoader.loadImage(pic.getPicName(), img, new IImageloader() {
+//                @Override
+//                public void onDownloadSucc(Bitmap bitmap, String c_url, View imageView) {
+//                    ((ImageView) imageView).setImageBitmap(bitmap);
+//                }
+//            }, window_width, 240);
+            ImageLoader.bindBitmap(pic.getPicName(),img,window_width,240);
 
             advPics.add(img);
             ImageView simg = new ImageView(this);

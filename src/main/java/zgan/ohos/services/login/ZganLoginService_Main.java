@@ -13,6 +13,7 @@ public class ZganLoginService_Main implements Runnable {
     private java.util.Queue<byte[]> Queue = new LinkedList<byte[]>();
     private java.util.Queue<Frame> Queue_Function = new LinkedList<Frame>();
     private boolean isGetData = false;
+    private static final String  TAG="ZganLoginService_Main";
     private int intSendOutTime = 200; // 20秒
     private boolean isSendOutTime = false;
     private int intTime = 0;
@@ -26,7 +27,7 @@ public class ZganLoginService_Main implements Runnable {
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        Log.v("suntest", "ZganLoginService_MainMain");
+        Log.v(TAG, "ZganLoginService_MainMain");
         Thread tt = new Thread(new Thread_SendOutTime());
         tt.start();
 
@@ -53,7 +54,7 @@ public class ZganLoginService_Main implements Runnable {
                             resultByte = Queue.poll();
 
                             Frame f = new Frame(resultByte);
-                            Log.v("suntest", "ZganLoginService_Main接收到数据"+f.subCmd);
+                            Log.v(TAG, "ZganLoginService_Main接收到数据"+f.subCmd);
                             //modified by yajunsun 20151218暂时修改
                             intTime = 0;
                             isSendOutTime = false;

@@ -59,7 +59,7 @@ public class event_ListAdapter extends RecyclerView.Adapter<event_ListAdapter.Vi
                 Intent intent = new Intent(context, EventFrontPage.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("currentevent", list.get(position).getEvent());
-                bundle.putSerializable("currentproduct",list.get(position).getProduct());
+                bundle.putSerializable("currentproduct", list.get(position).getProduct());
                 //bundle.putInt("productid", list.get(position).getProduct().getId());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
@@ -77,12 +77,13 @@ public class event_ListAdapter extends RecyclerView.Adapter<event_ListAdapter.Vi
         try {
             List<Product_Pics> pics = new Product_PicsDal().getProductPics(list.get(position).getProduct().getId());
             if (pics.size() > 0)
-                imageLoader.loadImage(pics.get(0).getPicName(), holder.iv_sample, new IImageloader() {
-                    @Override
-                    public void onDownloadSucc(Bitmap bitmap, String c_url, View imageView) {
-                        ((ImageView)imageView).setImageBitmap(bitmap);
-                    }
-                }, 200, 200);
+//                imageLoader.loadImage(pics.get(0).getPicName(), holder.iv_sample, new IImageloader() {
+//                    @Override
+//                    public void onDownloadSucc(Bitmap bitmap, String c_url, View imageView) {
+//                        ((ImageView)imageView).setImageBitmap(bitmap);
+//                    }
+//                }, 200, 200);
+                ImageLoader.bindBitmap(pics.get(0).getPicName(), holder.iv_sample, 200, 200);
         } catch (Exception ex) {
             generalhelper.ToastShow(context, ex.getMessage());
         }
