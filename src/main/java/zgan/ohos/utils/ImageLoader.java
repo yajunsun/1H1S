@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.Executor;
@@ -111,92 +110,6 @@ public final class ImageLoader {
             //mImageView.setImageBitmap(currBitmap);
             if (download != null)
                 download.onDownloadSucc(currBitmap, String.valueOf(resId), mImageView);
-        }
-    }
-
-    /**
-     * 加载drawable资源图片
-     *
-     * @param context
-     * @param resId      资源ID
-     * @param mImageView imageview控件
-     * @param download   回调接口
-     */
-    public void loadDrawableRs(Context context, int resId, View mImageView, IImageloader download) {
-        loadDrawableRS(context, resId, mImageView, download, -1, -1);
-    }
-
-
-    /**
-     * 加载SD卡图片或网络图片
-     *
-     * @param imageName  图片uri
-     * @param mImageView imageview控件
-     * @param download   回调接口
-     */
-    public void loadImage(String imageName, View mImageView,
-                          IImageloader download) {
-        loadImage(imageName, mImageView, download,
-                -1, -1);
-    }
-
-    /**
-     * 加载SD卡图片或网络图片
-     *
-     * @param uri         图片uri
-     * @param mImageView  显示图片的控件
-     * @param download    回调接口
-     * @param _viewWidth  图像控件的宽
-     * @param _viewHeigth 图像控件的高
-     */
-    public void loadImage(final String uri, final View mImageView,
-                          final IImageloader download,
-                          int _viewWidth, int _viewHeigth) {
-        if (_viewHeigth == -1)
-            _viewHeigth = mImageView.getHeight();
-        if (_viewWidth == -1)
-            _viewWidth = mImageView.getWidth();
-        final String imageName = uri + "(" + _viewWidth + "*" + _viewHeigth + ")";
-        final int viewWidth = _viewWidth, viewHeigth = _viewHeigth;
-        Bitmap currBitmap = imageCaches.get(imageName);
-        if (currBitmap == null) {
-            getBitmapFromFile(imageName, _viewWidth, _viewHeigth);
-        }
-        if (currBitmap != null && mImageView != null) {
-            download.onDownloadSucc(currBitmap, imageName, mImageView);
-        } else if (currBitmap == null) {
-
-            ImageRequest imageRequest = new ImageRequest(uri, new Response.Listener<Bitmap>() {
-                @Override
-                public void onResponse(Bitmap response) {
-                    Log.v("suntest", "request:" + uri);
-                    Log.i("suntest", "request:" + uri);
-                    try {
-                        Bitmap dstbmp = null;
-                        if (response.getWidth() > viewWidth && response.getHeight() > viewHeigth)
-                            dstbmp = Bitmap.createBitmap(response, 0, 0, viewWidth, viewHeigth);
-                        else
-                            dstbmp = response;
-                        if (imageName != null) {
-                            Add2Cache(imageName, dstbmp);
-                        }
-
-
-                        download.onDownloadSucc(dstbmp, imageName, mImageView);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            },
-                    viewWidth, viewHeigth, ImageView.ScaleType.CENTER, Config.RGB_565,
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.v("suntest", error.getMessage());
-                            Log.i("suntest", error.getMessage());
-                        }
-                    });
-            MyApplication.requestQueue.add(imageRequest);
         }
     }
 
