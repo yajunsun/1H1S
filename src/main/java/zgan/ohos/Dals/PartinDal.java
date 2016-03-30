@@ -13,7 +13,7 @@ import zgan.ohos.Models.Partin;
  */
 public class PartinDal extends baseDal<Partin> {
     public String PartIn(int eventId, String PhoneNum, String HomeAdress) throws Exception {
-        String SOAP_ACTION = "http://download1.zgantech.com/IEventsContract/PartIn";
+        String SOAP_ACTION = "http://service.zgantech.com/IEventsContract/PartIn";
         String MethodName = "PartIn";
         SoapObject request = new SoapObject(NameSpace, MethodName);
         request.addProperty("eventId", eventId);

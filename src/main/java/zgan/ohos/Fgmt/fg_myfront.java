@@ -3,6 +3,7 @@ package zgan.ohos.Fgmt;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -129,18 +130,28 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.l_call_mall:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 //                builder.setTitle("确定拨打”02367176359“吗?");
 //                builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
-                intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:02367176359"));
-                try {
-                    startActivityIfLogin(intent, resultCodes.DIRECTCALL);
-                } catch (Exception e) {
-                    generalhelper.ToastShow(getActivity(), "呼叫失败" + e.getMessage());
-                    //telDialog.dismiss();
+               // requestPermissions(new String[]{"android.permission.CALL_PHONE"});
+                PackageManager pm = getActivity().getPackageManager();
+                boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                        pm.checkPermission("android.permission.CALL_PHONE", "zgan.ohos"));
+                if (permission)
+                    try {
+                        intent = new Intent(Intent.ACTION_CALL );
+                        intent.setData(Uri.parse("tel:02367176359"));
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        generalhelper.ToastShow(getActivity(), "呼叫失败" + e.getMessage());
+                        //telDialog.dismiss();
+                    }
+                else {
+                    generalhelper.ToastShow(getActivity(), "呼叫失败，没有此权限");
                 }
+
                 //}
 //                });
 //                builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
@@ -212,8 +223,7 @@ public class fg_myfront extends myBaseFragment implements View.OnClickListener {
             public void onClick(View v) {
                 if (PreferenceUtil.getCommunityId().equals("0") || PreferenceUtil.getCommunityId().equals("")) {
                     opendialog.show();
-                }
-                else {
+                } else {
                     Intent intent = new Intent(getActivity(), LeaveMessages.class);
                     startActivityWithAnim(getActivity(), intent);
                 }
